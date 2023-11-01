@@ -1,0 +1,124 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{epsfig}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{tocloft}
+\usepackage[margin=1in]{geometry}
+\usepackage{indentfirst}
+\usepackage{verbatim}
+\usepackage{subcaption}
+\usepackage{siunitx}
+\usepackage{chngcntr}
+\usepackage{mathtools,cancel}
+\usepackage{afterpage}
+\usepackage{url}
+\usepackage{amssymb,amsmath,amsthm}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{multicol}
+% \usepackage{cite}
+
+
+%% Import a package useful for displaying graphics.
+\usepackage{graphicx}
+
+% Comment the following line to use TeX's default font of Computer Modern.
+%\usepackage{times,txfonts}
+
+
+\newtheoremstyle{ex215}% name of the style to be used
+  {18pt}% measure of space to leave above the theorem. E.g.: 3pt
+  {12pt}% measure of space to leave below the theorem. E.g.: 3pt
+  {}% name of font to use in the body of the theorem
+  {}% measure of space to indent
+  {\bfseries}% name of head font
+  {:}% punctuation between head and body
+  {2ex}% space after theorem head; " " = normal interword space
+  {}% Manually specify head
+\theoremstyle{ex215} 
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}{Definition}[section]
+\newtheorem*{remark}{Remark}
+\newtheorem{example}{Example}[section]
+\newtheorem{proposition}{Proposition}[section]
+
+% Set figure, subsection, equation and table counters
+\counterwithin{figure}{section}
+\counterwithin{subsection}{section}
+\counterwithin{equation}{section}
+\counterwithin{table}{section}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{quiver}
+\usepackage{float}
+% \usepackage{subcaption}
+\setcitestyle{square}
+\doublespacing
+
+\renewcommand\cftsecfont{\normalfont}
+\renewcommand\cftsecpagefont{\normalfont}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftsecdotsep}}
+\renewcommand\cftsecdotsep{\cftdot}
+\renewcommand\cftsubsecdotsep{\cftdot}
+\renewcommand\cftsubsubsecdotsep{\cftdot}
+\cftsetindents{subsection}{1in}{0.5in}
+\cftsetindents{subsubsection}{2in}{0.5in}
+\renewcommand{\cftfigfont}{Figure }
+\renewcommand\cftfigdotsep{\cftdot}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{\arabic{section}.\arabic{figure}} % Format figure counter
+\renewcommand{\contentsname}{}                              % Removes the table of contents header
+
+\newcommand{\Reals}{\ensuremath{\mathbb R}}
+\newcommand{\Nats}{\ensuremath{\mathbb N}}
+\newcommand{\Ints}{\ensuremath{\mathbb Z}}
+\newcommand{\Rats}{\ensuremath{\mathbb Q}}
+\newcommand{\Cplx}{\ensuremath{\mathbb C}}
+\newcommand{\Sym}{\text{Sym}}
+\newcommand{\im}{\text{Im}}
+%% Some equivalents that some people may prefer.
+\let\RR\Reals
+\let\NN\Nats
+\let\II\Ints
+\let\CC\Cplx
+\def\Riem{\mathcal{R}}
+
+\newcommand\thesistitle{The Graph Isomorphism Problem:\\An Introduction}     % Put title here in all caps
+\newcommand{\mysection}[1]{%                 %using this instead of /section should handle formatting of section title and table of contents entry
+  \section*{#1}%
+  \addtocounter{section}{1}%
+  \addcontentsline{toc}{section}{#1}
+  \setcounter{equation}{0}
+  \setcounter{figure}{0}
+  \setcounter{subsection}{0}
+  \setcounter{table}{0}}
+  
+
+\titleformat{\section}
+  {\normalfont\fontfamily{phv}\fontsize{16}{19}\filcenter}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\fontfamily{phv}\fontsize{14}{17}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\fontfamily{phv}\fontsize{14}{17}}{\thesubsubsection}{1em}{}
+  
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.eps}  
+
+\begin{document}
+
+
+\section*{Abstract}
+The graph isomorphism (GI) problem has plagued mathematicians and theoretical computer scientists for decades. The statement of the problem is simple: given any two graphs $G$ and $G'$, is $G$ isomorphic to $G'$? However, no algorithm (currently) exists that can answer this question in $O(p(n))$ (polynomial time) for \textit{any} two graphs, where $n$ is the number of vertices in each graph. Babai presented an approach to GI that solves the problem in $\exp\left((\log n)^{\mathcal{O}(1)}\right)$\cite{babai2016,babai2018}. This bound is called \textit{quasipolynomial} time; it is the best known bound for solving the graph isomorphism problem for any two graphs. \\
+Babai's 2016 manuscript is a difficult read for many, even for those who have a graph theory or algebra background. Much of the machinery the \cite{babai2016} paper used was either developed specifically for solving GI over the last forty years or novel to that paper, which means understanding Babai's quasipolynomial result starts with specialized results from the 1980s, in particular, \cite{luks1982}. Therefore, the goal of this project is to give a rigorous introduction to Babai's quasipolynomial result, including an overview of motivating ideas and useful prerequisite knowledge. No graph theory knowledge is required, but general knowledge of mathematics at the graduate level is assumed.
+
+\bibliographystyle{agufull08}   % include your bibliography style file. This is the style file for the American Geophysical Union.
+\bibliography{main}    
+\end{document}

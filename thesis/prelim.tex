@@ -1,0 +1,96 @@
+% Add in your preliminary pages
+
+\begin{titlepage}
+\begin{center}
+\setcounter{page}{1}
+\addcontentsline{toc}{section}{Title Page}
+\thesistitle\\
+\bigskip 
+\bigskip
+By\\
+Glen Woodworth\\ % Put your name and prior degrees here
+\bigskip
+\bigskip
+A Project Submitted in Partial Fulfillment of the Requirements\\
+for the Degree of\\
+Master of Science\\
+in\\
+Mathematics\\  % Put the name of your degree here
+\bigskip
+University of Alaska Fairbanks\\
+\today \\  % Date of graduation
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+APPROVED:
+\end{center}
+%\begin{comment}
+\singlespacing
+\begin{tabular}{p{7cm} l}  % Use this table for the names on your signature form
+\hfill & Dr. Advisor, Committee Chair\\
+ & Dr. One, Committee Member\\
+ & Dr. Two, Committee Member\\
+ & Dr. Three, Committee Member\\
+ & Dr. Step Stool, Chair\\                           % Name of Department Chair
+ & \qquad \textit{Department of Furniture}\\    % Your Department
+ & Dr. Tall Ladder, Dean\\                   % Dean of your college
+ & \qquad \textit{College of Carpentry}\\       % Name of your college
+ & Dr. Michael Castellini, \textit{Dean of the Graduate School}
+\end{tabular}
+%\end{comment}
+\doublespacing
+\thispagestyle{empty}
+\end{titlepage}
+
+\clearpage\mbox{}\thispagestyle{empty}\clearpage  % Add a blank page without page number
+
+
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+\paragraph{}
+
+%ABSTRACT TEXT HERE
+The graph isomorphism (GI) problem has plagued mathematicians and theoretical computer scientists for decades. The statement of the problem is simple: given any two graphs $G$ and $G'$, is $G$ isomorphic to $G'$? However, no algorithm (currently) exists that can answer this question in $O(p(n))$ (polynomial time) for \textit{any} two graphs, where $n$ is the number of vertices in each graph. Babai presented an approach to GI that solves the problem in $\exp\left((\log n)^{\mathcal{O}(1)}\right)$\cite{babai2016,babai2018}. This bound is called \textit{quasipolynomial} time; it is the best known bound for solving the graph isomorphism problem for any two graphs. \\
+Babai's 2016 manuscript is a difficult read for many, even for those who have a graph theory or algebra background. Much of the machinery the \cite{babai2016} paper used was either developed specifically for solving GI over the last forty years or novel to that paper, which means understanding Babai's quasipolynomial result starts with specialized results from the 1980s, in particular, \cite{luks1982}. Therefore, the goal of this project is to give a rigorous introduction to Babai's quasipolynomial result, including an overview of motivating ideas and useful prerequisite knowledge. No graph theory knowledge is required, but general knowledge of mathematics at the graduate level is assumed.
+
+\par
+\pagenumbering{roman}
+\setcounter{page}{3}
+\newpage
+
+
+
+\section*{Table of Contents}            % Add table of Contents
+\singlespacing
+\hfill Page
+\setcounter{page}{5}
+\addcontentsline{toc}{section}{Table of Contents}
+\tableofcontents
+
+\makeatletter
+\@starttoc{toc}
+\makeatother
+
+\doublespacing
+\newpage
+
+\section*{List of Figures}              % Add list of Figures
+
+\hfill Page
+\addcontentsline{toc}{section}{List of Figures}
+\setcounter{page}{7} % Set a page number if you need.  All prelim pages should start with an odd number page.
+\makeatletter
+\@starttoc{lof}
+\makeatother
+
+\clearpage\mbox{}\clearpage
+
+%% Begin acknowledgments
+\section*{Acknowledgments}
+\addcontentsline{toc}{section}{Acknowledgments}
+%\setcounter{page}{11}  Set a page number if you need.  All prelim pages should start with an odd number page.
+Special Thanks!!!
+\newpage

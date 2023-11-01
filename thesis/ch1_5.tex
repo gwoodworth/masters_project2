@@ -1,0 +1,448 @@
+\mysection{Algorithm Pre-reqs}
+    \begin{definition}
+        An \textit{algorithm} $\mathcal{A}=(\mathcal{D},\mathcal{R},\mathcal{I})$ is an ordered triple where $\mathcal{D}$ is the set of posisble inputs, $\mathcal{R}$ is the set of possible outputs, and $\mathcal{I}$ is an ordered list of instructions aimed at producing a function $f_\mathcal{A}:\mathcal{D}\rightarrow\mathcal{R}$ where $f(D)=R$ if and only if the output of $\mathcal{A}$ given input $D$ is $R$. 
+    \end{definition}
+    Let $\Gamma$ be a set of graphs.
+    \begin{definition}
+        An \textit{algorithm of graph identification} is an algorithm $\mathcal{A}:\Gamma\times\Gamma\rightarrow \{-1,1\}$ where $\mathcal{A}(G,G') = 1$ if $G\cong G'$ and $\mathcal{A}(G,G')=-1$ otherwise. \cite{weisfeiler1976construction}. 
+    \end{definition}
+    Let $\mathbb{A}$ be the set of all graph identification algorithms.
+    \begin{definition}
+        The \textit{speed} of an algorithm for graph identification $\mathcal{A}$ is a function $f:\mathbb{A}\times\Nats\rightarrow\Nats$ where $f(\mathcal{A},n)$ is the maximum number of steps required by $\mathcal{A}$ to find the result for any pair of graphs in the domain of $\mathcal{A}$ with $n$ vertices \cite{weisfeiler1976construction}.
+    \end{definition}
+    \begin{definition}
+        For all sufficiently large $n$, the \textit{problem of graph identification} is to find an algorithm $\mathcal{A}\in\mathbb{A}$ with a domain of consisting of all pairs of graphs on $n$ vertices such that for any other such algorithm $\mathcal{B}$ we have
+        \[f(\mathcal{A},n)\le f(\mathcal{B},n)\]
+        \cite{weisfeiler1976construction}.
+    \end{definition}
+    % The most straightforward graph identification algorithm $\mathcal{A}$ checks every possible bijection between two graphs to see if they any of them is an isomorphism.
+
+    % \begin{align*}
+    %     &\textbf{Straightforward Graph Identification Algorithm }\\
+    % \textbf{Input:}&\text{ Graphs }G=\{V,E\},\;G'=\{V',E'\}\;\text{where }|V|=|V'|=n\\
+    % \textbf{Initialize:}&\text{ Label the vertices using degree}\\
+    % \textbf{Iterate:}&\text{ Produce characteristic vectors for all vertices in }G\text{ and }G',\text{ order all vectors, relabel}\\
+    % \textbf{Output:}&\text{ A graph isomorphism from $G$ to $G'$ does not exist }\\&\text{or the existence of such a function has not been ruled out.}
+    % \end{align*}
+    %  That is, for any $n$, $f(\mathcal{A},n)=n!$. 
+    The Weisfeiler-Leman (WL) Algorithm is an isomorphism test that makes use of a method from \cite{weisfeiler1968}, \cite{weisfeiler1976construction} for reducing a graph to a canonical form, where canonical refers to a canonical labelling of the vertices of the graph. 
+	\begin{definition}
+		A \textit{partial ordering} of a set $S$ is a relation $<$ on $S$ satisfying the following for all $a,b,c$ in S:
+		\begin{enumerate}
+			\item Irreflexive: not $a<a$.
+			\item Asymmetric: If $a<b$ then not $b<a$.
+			\item Transitive: If $a<b$ and $b<c$ then $a<c$.
+		\end{enumerate}
+		For all $a,b\in S$, if $a<b$ or $b<a$, we say $a$ and $b$ are \textit{comparable}; otherwise,we say $a$ and $b$ are \textit{incomparable}.
+	\end{definition}
+    Let $\mathfrak{X}$ be a set of graphs.
+    \begin{definition}
+    For any $X=(V,E)\in\mathfrak{X}$ and any $g\in$ Sym$(V)$, define $gX = (V',E')$ where $V'=\{g(v):v\in V\}$ and $E'=\{(g(u),g(v)):(u,v)\in E\}$.
+    \end{definition}
+	\begin{definition}
+		An algorithm $\mathcal{A}:\mathfrak{X}\rightarrow\mathfrak{X}$ is called \textit{canonical} if for all $X=(V,E)\in\mathfrak{X}$ and for all $g\in$ Sym$(V)$ \[\mathcal{A}(gXg^{-1})=\mathcal{A}(X)\]\cite{weisfeiler1976construction}.
+        
+	\end{definition}
+    \begin{definition}
+        A canonical algorithm $\mathcal{A}$ is called a \textit{canonization algorithm} if for any $X=(V,E)\in\mathfrak{X}$ there exists $g\in$ Sym$(V)$ such that \[\mathcal{A}(X)=gXg^{-1}\]\cite{weisfeiler1976construction}. 
+    \end{definition}
+	% \begin{definition}
+	% 	Given a graph $G=\{V,E\}$, a \textit{canonical labeling} of $V$ is a partial ordering of $V$ such that if vertices $a$ and $b$ are incomparable, then there is a graph automorphism sending $a$ to $b$ \cite{weisfeiler1968}.
+	% \end{definition}
+    % \begin{definition}
+    %     Given a graph $G=\{V,E\}$, a \textit{canonical form} of $G$ is its adjacency matrix, $A(G)$, with respect to a canonical labeling of its vertices, denoted $Canon(G)$ \cite{weisfeiler1968}.
+    % \end{definition}
+	 To solve the GI problem, we musThe usefulness of the preceding definitions for our purposes mainly depends not only on the existence of a  on favorable answers to the following two questions. Give any finite graph $G$:
+	 I claim that the answer to (1) is yes. Below, we use the Weisfeiler Lemen Canonical Labelling algorithm to prove this. With respect to (2), the answer is no, which will also be shown shortly. However, given a method for producing a canonical form of a graph, if we apply the same method to two different graphs, the result can be useful for determining that the two graphs are not isomorphic. Let $G'=\{V',E'\}$ be a graph where $|V|=|V'|$. Suppose we use the same method to reduce $G$ and $G'$ to their respective canonical forms. If the reduced versions of $G$ and $G'$, respectively, are not isomorphic to each other, then $G$ and $G'$ are not isomorphic. As we will see shortly, for many pairs of graphs, after they are each reduced to a canonical form using the same method, it is straightforward to check that they are not isomorphic.
+	 \paragraph{} The following definition is necessary for understanding the Weisfeiler Lemen Canonical Labelling algorithm.
+	\begin{definition}
+		Let $G=\{V,E\}$ be a graph and $\{l_1,l_2,\dots,l_n\}$ be a partition of $V$ into $n$ classes. For any $k\in\{1,2,\dots,n\}$ and any vertex $u\in l_k$ the \textbf{characteristic vector} of $u$, denoted $cv(u)$, is a $n+1$-tuple defined by $cv(u)=(k,u_1,u_2,\dots,u_n)$ where $u_i\in\Ints_{\ge0}$ for $i\in\{1,2,\dots,n\}$ is the number of neighbors $u$ has in class $l_i$ \cite{weisfeiler1968}.  
+	\end{definition}
+	\begin{remark}
+		Evidently $n\le |V|+1$.
+	\end{remark} 
+	\paragraph{}To reduce a graph to canonical form, \cite{weisfeiler1968} propose the following iterative procedure. Initially, each vertex $u$ is labelled by its degree. These labels determine the initial class for each vertex. Note that there is a natural order on these classes, as they are integers. An iteration of the algortihm proceeds as follows. Generate a characterstic vector for each vertex. Next, order the characteristic vectors lexicographically. Finally, relabel the vertices babsed on that order. Iterate until the classes stabilize, that is, until subsequent iterations would not change the classes. For any simple graph, this algorithm will always terminate and produce a canonical labelling \cite{weisfeiler1968}. The following example demostrates the initialization and one iteration of this proceudre.
+\begin{example}
+	Consider the following graph $G=\{V,E\}$ where $V=\{A,B,C,a,b\}$ and $V=\{(A,B),(A,C),(A,a),(B,C),(C,a),(C,b)\}.$ 
+	% https://q.uiver.app/#q=WzAsNixbMCwxLCJBIFxcYnVsbGV0Il0sWzEsMSwiQ1xcYnVsbGV0Il0sWzIsMSwiYlxcYnVsbGV0Il0sWzEsMiwiYVxcYnVsbGV0Il0sWzEsMCwiQlxcYnVsbGV0Il0sWzEsMywiRyJdLFswLDEsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSwyLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEsMywiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFswLDMsIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSw0LCIiLDIseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzQsMCwiIiwyLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dXQ==
+\[\begin{tikzcd}
+	& B\bullet \\
+	{A \bullet} & C\bullet & b\bullet \\
+	& a\bullet \\
+	& G
+	\arrow[no head, from=2-1, to=2-2]
+	\arrow[no head, from=2-2, to=2-3]
+	\arrow[no head, from=2-2, to=3-2]
+	\arrow[no head, from=2-1, to=3-2]
+	\arrow[no head, from=2-2, to=1-2]
+	\arrow[no head, from=1-2, to=2-1]
+\end{tikzcd}\]
+We partition $V$ into two classes, capital letters and lower case letters. That is, our partition of $V$ is $P = \{l_1,l_2\}$ where $l_1=\{A,B,C\}$ and $l_2=\{a,b\}$. For vertex $A$, note that $A$ is in class $l_1$. We have $N(A)=\{B,C,a\}$. Therefore, $A$ has two neighbors in $l_1$, namely, $B$ and $C$, but only one neighbor in $l_2$, $a$. Thus, $cv(A)=(1,2,1)$. The reader is encouraged to construct the characterstic vectors for the remaining verteices. To check your work, the results are shown in the table below.
+\begin{center}
+% \begin{multicols}{2}
+	\begin{tabular}{|c|c|c|c|c|c|}
+		\hline
+		vertices&A&B&C&a&b\\
+		\hline
+		cv&(1,2,1)&($1$,2,0)&($1$,2,2)&($2$,2,0)&($2$,1,0)\\
+		\hline
+	\end{tabular}
+% \end{multicols}
+\end{center}
+The last step of an iteration is to order the vectors lexicographically and relabel the vertices. Each vector must first be turned into an integer. For each vector, we simply remove the commmas separating its entries then concatenate the entries. We apply this to each vector, creating an integer label for each vertex. For example, the integer label for $A$ is $121$ because $cv(A)=(1,2,1)$. Finally, we order the integer labels smallest to largest and assign a new label based on this ordering. Vertices associated with the smallest integer label receive a new label of 3, since 3 is the next integer after our initial 2 classes. The vertex with the next smallest integer label receive a new label of 4. Continue until every vertex has been relabelled. For example, the integer label for $B$ is $120$. Since 120 is the smallest integer label, $B$ receives a new label of 3. The result of applying this ordering and relabelling process to the vertices and characteristic vectors of this example is shown in the table below.
+\begin{center}
+	% \begin{multicols}{2}
+		\begin{tabular}{|c|c|c|c|c|c|}
+			\hline
+			vertices&A&B&C&a&b\\
+			\hline
+			integer label&121&120&122&220&210\\
+			\hline
+			new label&4&3&5&7&6\\
+			\hline
+		\end{tabular}
+	% \end{multicols}
+	\end{center}
+	Note that each vertex has a unique label. That is, there are no incomparable vertices, which means we have produced a canonical labeling of $V$.
+\end{example}
+	\paragraph{} We formalize the steps in the following algorithm.
+
+	\begin{align*}
+		&\textbf{WL Canonical Labeling }\\
+	\textbf{Input:}&\;G=\{V,E\}\\
+	\textbf{Initialize:}&\text{ Label vertices using degree}\\
+	\textbf{Iterate:}&\text{ Produce characteristic vectors, order lexicographically and relabel}\\
+	\textbf{Output:}&\text{ Relabeled graph }G \text{ with a canonical labelling on the labels of the vertex set }
+	\end{align*}
+	The following example applies WL Canonical Labeling until a canonical labelling is produced.
+	\begin{example}
+        Given the graph $G$ below, we follow WL canonical labelling until the classes stabilize.\\
+			\textbf{Input:}% https://q.uiver.app/?q=WzAsNSxbMCwwLCJcXGJ1bGxldCJdLFswLDEsIlxcYnVsbGV0Il0sWzEsMSwiXFxidWxsZXQiXSxbMiwxLCJcXGJ1bGxldCJdLFsxLDAsIlxcYnVsbGV0Il0sWzAsMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDIsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMiwzLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEsNCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dXQ==
+    \[\begin{tikzcd}
+	a\;\bullet & b\;\bullet \\
+	c\;\bullet & d\;\bullet & e\;\bullet
+	\arrow[no head, from=1-1, to=2-1]
+	\arrow[no head, from=2-1, to=2-2]
+	\arrow[no head, from=2-2, to=2-3]
+	\arrow[no head, from=2-1, to=1-2]
+\end{tikzcd}\]
+Ordering the vertices of $G$ alphabetically, the adjaceny matrix of $G$ is as follows.
+\[A(G)=\begin{pmatrix}
+	0&0&1&0&0\\
+	0&0&1&0&0\\
+	1&1&0&1&0\\
+	0&0&1&0&1\\
+	0&0&0&1&0
+\end{pmatrix}\]
+\textbf{I. Initialize:}
+\begin{multicols}{2}
+\begin{tabular}{|c|c|}
+	\hline
+	classes&label\\
+	\hline
+	\{c\}&3\\
+	\{d\}&2\\
+	\{a,b,e\}&1\\
+	\hline
+\end{tabular}\\
+% https://q.uiver.app/?q=WzAsNSxbMCwwLCIxXFxidWxsZXQiXSxbMCwxLCIzXFxidWxsZXQiXSxbMSwxLCIyXFxidWxsZXQiXSxbMiwxLCIxXFxidWxsZXQiXSxbMSwwLCIxXFxidWxsZXQiXSxbMCwxLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEsMiwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsyLDMsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSw0LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+\[\begin{tikzcd}
+	1\bullet & 1\bullet \\
+	3\bullet & 2\bullet & 1\bullet
+	\arrow[no head, from=1-1, to=2-1]
+	\arrow[no head, from=2-1, to=2-2]
+	\arrow[no head, from=2-2, to=2-3]
+	\arrow[no head, from=2-1, to=1-2]
+\end{tikzcd}\]
+\end{multicols}
+\textbf{II. Generate Characteristic Vectors \& Relabel:}\\
+\begin{multicols}{2}
+\begin{tabular}{|c|c|c|}
+	\hline
+	classes&cv&relabel\\
+	\hline
+	\{c\}&(3,2,1,0)&7\\
+	\{d\}&(2,1,0,1)&6\\
+	\{e\}&(1,0,1,0)&5\\
+	\{a,b\}&(1,0,0,1)&4\\
+	\hline
+\end{tabular}\\
+
+% https://q.uiver.app/?q=WzAsNSxbMCwwLCIoMSwwLDAsMSlcXGJ1bGxldCJdLFswLDEsIigzLDIsMSwwKVxcYnVsbGV0Il0sWzEsMSwiKDIsMSwwLDEpXFxidWxsZXQiXSxbMiwxLCIoMSwwLDEsMClcXGJ1bGxldCJdLFsxLDAsIigxLDAsMCwxKVxcYnVsbGV0Il0sWzAsMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDIsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMiwzLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEsNCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dXQ==
+\[\begin{tikzcd}
+	{4\;\bullet} & {4\;\bullet} \\
+	{7\;\bullet} & {6\;\bullet} & {5\;\bullet}
+	\arrow[no head, from=1-1, to=2-1]
+	\arrow[no head, from=2-1, to=2-2]
+	\arrow[no head, from=2-2, to=2-3]
+	\arrow[no head, from=2-1, to=1-2]
+\end{tikzcd}\]
+\end{multicols}\newpage
+\textbf{III. Iterate:} \\
+Since the classes stay the same, the process terminates here. 
+\begin{multicols}{2}
+\begin{tabular}{|c|c|}
+	\hline
+	classes&cv\\
+	\hline
+	\{c\}&(7,2,0,1,0)\\
+	\{d\}&(6,0,1,0,1)\\
+	\{e\}&(5,0,0,1,0)\\
+	\{a,b\}&(4,0,0,1,0)\\
+	\hline
+\end{tabular}\\
+% https://q.uiver.app/?q=WzAsNSxbMCwwLCIoMSwwLDAsMSlcXGJ1bGxldCJdLFswLDEsIigzLDIsMSwwKVxcYnVsbGV0Il0sWzEsMSwiKDIsMSwwLDEpXFxidWxsZXQiXSxbMiwxLCIoMSwwLDEsMClcXGJ1bGxldCJdLFsxLDAsIigxLDAsMCwxKVxcYnVsbGV0Il0sWzAsMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDIsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMiwzLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEsNCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dXQ==
+\[\begin{tikzcd}
+	{4\;\bullet} & {4\;\bullet} \\
+	{7\;\bullet} & {6\;\bullet} & {5\;\bullet}
+	\arrow[no head, from=1-1, to=2-1]
+	\arrow[no head, from=2-1, to=2-2]
+	\arrow[no head, from=2-2, to=2-3]
+	\arrow[no head, from=2-1, to=1-2]
+\end{tikzcd}\]
+\end{multicols}
+The following is a canonical form of $G$ generated by WL canonical form.
+\[Canon(G)=\begin{pmatrix}
+	0&0&0&0&1\\
+	0&0&0&0&1\\
+	0&0&0&1&0\\
+	0&0&1&0&1\\
+	1&1&0&1&0
+\end{pmatrix}\]
+% Using $Canon(G)$, we generate a graph labelled using the first entry of each characteristic vector. 
+% % https://q.uiver.app/?q=WzAsNSxbMCwwLCIxXFxidWxsZXQiXSxbMCwxLCI0XFxidWxsZXQiXSxbMSwxLCIzXFxidWxsZXQiXSxbMiwxLCIyXFxidWxsZXQiXSxbMSwwLCIxXFxidWxsZXQiXSxbMCwxLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEsMiwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsyLDMsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSw0LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+% \[\begin{tikzcd}
+% 	4\bullet & 4\bullet \\
+% 	7\bullet & 6\bullet & 5\bullet
+% 	\arrow[no head, from=1-1, to=2-1]
+% 	\arrow[no head, from=2-1, to=2-2]
+% 	\arrow[no head, from=2-2, to=2-3]
+% 	\arrow[no head, from=2-1, to=1-2]
+% \end{tikzcd}\]
+
+	
+
+
+
+
+
+   
+If two vertices $u,v\in V$ are in the same class when the algorithm terminates, then there exists an automorphism sending $u$ to $v$ \cite{weisfeiler1968}. In this case, the partial ordering of $V$ given by such classes is a canonical form by Definition 2.7. On the other hand, if each vertex has a unique class when the algorithm terminates, then the partial ordering of $V$ given by the classes leaves no incomparable vertices. In this case, the ordering on $V$ given by the classes is a canonical form as well, satisfying Definition 2.7 trivially. 
+    \end{example} 
+
+	\begin{remark}
+		Since WL iteratively produces partitions of vertex sets, it is also called \textit{color refinement}. The color of a vertex is its class at any given iteration. 
+	\end{remark}
+Let $G=\{V,E\}$ be a graph. Since there are possibly many partial orderings of $V$, there is no single canonical form for $G$. For example if we  
+WL canonical labelling algorithm can be transformed into an isomorphism test, the \textit{Naive Weisfeler Leman Isomorphism Test}. This test takes two graphs as input, then computes a canonical labelling of the graphs at the same time, using the same alphabet to label each graph. Starting from the Initialize step, if the graphs have different labellings at any step the algorithm terminates immediately, returning that the two graphs are not isomorphic.
+		\begin{align*}
+			&\textbf{Naive WL Isomorphism Test }\\
+		\textbf{Input:}&\text{ Graphs }G=\{V,E\},\;G'=\{V',E'\}\\
+		\textbf{Initialize:}&\text{ Label the vertices using degree}\\
+		\textbf{Iterate:}&\text{ Produce characteristic vectors for all vertices in }G\text{ and }G',\text{ order all vectors, relabel}\\
+		\textbf{Output:}&\text{ A graph isomorphism from $G$ to $G'$ does not exist }\\&\text{or the existence of such a function has not been ruled out.}
+		\end{align*}
+		\begin{example}
+			This example applies the Naive WL Isomorphism Test to $H$ and $H'$.
+			   % https://q.uiver.app/?q=WzAsMTQsWzIsMCwiXFxidWxsZXQiXSxbMywxLCJcXGJ1bGxldCJdLFsyLDIsIlxcYnVsbGV0Il0sWzEsMiwiXFxidWxsZXQiXSxbMCwxLCJcXGJ1bGxldCJdLFsxLDAsIlxcYnVsbGV0Il0sWzcsMCwiXFxidWxsZXQiXSxbOCwxLCJcXGJ1bGxldCJdLFs3LDIsIlxcYnVsbGV0Il0sWzYsMiwiXFxidWxsZXQiXSxbNSwxLCJcXGJ1bGxldCJdLFs2LDAsIlxcYnVsbGV0Il0sWzEsMywiSCJdLFs3LDMsIkgnIl0sWzAsMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDIsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMiwzLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzMsNCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs0LDUsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw3LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzcsOCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs4LDksIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbOSwxMCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMCwxMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMSw2LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzExLDksIiIsMSx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw4LCIiLDEseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzUsMCwiIiwxLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFszLDAsIiIsMSx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNSwyLCIiLDEseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+\[\begin{tikzcd}[ampersand replacement=\&]
+	\& a\;\bullet \& b\;\bullet \&\&\&\& a'\;\bullet \& b'\;\bullet \\
+	C\;\bullet \&\&\& c\;\bullet \&\& C'\;\bullet \&\&\& c'\;\bullet \\
+	\& B\;\;\bullet \& A\;\bullet \&\&\&\& B'\;\bullet \& A'\;\bullet \\
+	\& H \&\&\&\&\&\& {H'}
+	\arrow[no head, from=1-3, to=2-4]
+	\arrow[no head, from=2-4, to=3-3]
+	\arrow[no head, from=3-3, to=3-2]
+	\arrow[no head, from=3-2, to=2-1]
+	\arrow[no head, from=2-1, to=1-2]
+	\arrow[no head, from=1-8, to=2-9]
+	\arrow[no head, from=2-9, to=3-8]
+	\arrow[no head, from=3-8, to=3-7]
+	\arrow[no head, from=3-7, to=2-6]
+	\arrow[no head, from=2-6, to=1-7]
+	\arrow[no head, from=1-7, to=1-8]
+	\arrow[no head, from=1-7, to=3-7]
+	\arrow[no head, from=1-8, to=3-8]
+	\arrow[no head, from=1-2, to=1-3]
+	\arrow[no head, from=3-2, to=1-3]
+	\arrow[no head, from=1-2, to=3-3]
+\end{tikzcd}\]
+\newpage
+\textbf{I. Initialize:} Label the vertices by their degree.
+% https://q.uiver.app/?q=WzAsMTIsWzIsMCwiMyJdLFszLDEsIjIiXSxbMiwyLCIzIl0sWzEsMiwiMyJdLFswLDEsIjIiXSxbMSwwLCIzIl0sWzcsMCwiMyJdLFs4LDEsIjIiXSxbNywyLCIzIl0sWzYsMiwiMyJdLFs1LDEsIjIiXSxbNiwwLCIzIl0sWzAsMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDIsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMiwzLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzMsNCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs0LDUsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw3LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzcsOCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs4LDksIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbOSwxMCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMCwxMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMSw2LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzExLDksIiIsMSx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw4LCIiLDEseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzUsMCwiIiwxLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFszLDAsIiIsMSx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNSwyLCIiLDEseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+\[\begin{tikzcd}[ampersand replacement=\&]
+	\& 3 \& 3 \&\&\&\& 3 \& 3 \\
+	2 \&\&\& 2 \&\& 2 \&\&\& 2 \\
+	\& 3 \& 3 \&\&\&\& 3 \& 3
+	\arrow[no head, from=1-3, to=2-4]
+	\arrow[no head, from=2-4, to=3-3]
+	\arrow[no head, from=3-3, to=3-2]
+	\arrow[no head, from=3-2, to=2-1]
+	\arrow[no head, from=2-1, to=1-2]
+	\arrow[no head, from=1-8, to=2-9]
+	\arrow[no head, from=2-9, to=3-8]
+	\arrow[no head, from=3-8, to=3-7]
+	\arrow[no head, from=3-7, to=2-6]
+	\arrow[no head, from=2-6, to=1-7]
+	\arrow[no head, from=1-7, to=1-8]
+	\arrow[no head, from=1-7, to=3-7]
+	\arrow[no head, from=1-8, to=3-8]
+	\arrow[no head, from=1-2, to=1-3]
+	\arrow[no head, from=3-2, to=1-3]
+	\arrow[no head, from=1-2, to=3-3]
+\end{tikzcd}\]
+\begin{multicols}{2}
+\begin{tabular}{|c|c|}
+	\hline
+	classes&label\\
+	\hline
+	\{a,b,A,B\}&3\\
+	\{c,C\}&2\\
+	\{\}&1\\
+	\hline
+\end{tabular}\\
+
+\begin{tabular}{|c|c|}
+	\hline
+	classes&label\\
+	\hline
+	\{a',b',A',B'\}&3\\
+	\{c',C'\}&2\\
+	\{\}&1\\
+	\hline
+\end{tabular}
+\end{multicols}
+\textbf{II. Generate Characteristic Vectors \& Relabel:}\\
+Notice that the classes do not change from the previous step, so the process terminates.
+\begin{multicols}{2}
+\begin{tabular}{|c|c|}
+	\hline
+	classes&cv\\
+	\hline
+	\{a,b,A,B\}&(3,0,1,2)\\
+	\{c,C\}&(2,0,0,2)\\
+	\{\}&\\
+	\hline
+\end{tabular}
+
+\begin{tabular}{|c|c|}
+	\hline
+	classes&cv\\
+	\hline
+	\{a',b',A',B'\}&(3,0,1,2)\\
+	\{c',C'\}&(2,0,0,2)\\
+	\{\}&\\
+	\hline
+\end{tabular}
+\end{multicols}
+
+% Next, produce characteristic vectors.
+% % https://q.uiver.app/?q=WzAsMTIsWzIsMCwiKDMsMCwxLDIpIl0sWzMsMSwiKDIsMCwwLDIpIl0sWzIsMiwiKDMsMCwxLDIpIl0sWzEsMiwiKDMsMCwxLDIpIl0sWzAsMSwiKDIsMCwwLDIpIl0sWzEsMCwiKDMsMCwxLDIpIl0sWzIsMywiKDMsMCwxLDIpIl0sWzMsNCwiKDIsMCwwLDIpIl0sWzIsNSwiKDMsMCwxLDIpIl0sWzEsNSwiKDMsMCwxLDIpIl0sWzAsNCwiKDIsMCwwLDIpIl0sWzEsMywiKDMsMCwxLDIpIl0sWzAsMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDIsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMiwzLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzMsNCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs0LDUsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw3LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzcsOCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs4LDksIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbOSwxMCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMCwxMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMSw2LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzExLDksIiIsMSx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw4LCIiLDEseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzUsMCwiIiwxLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFszLDAsIiIsMSx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNSwyLCIiLDEseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+% \[\begin{tikzcd}[ampersand replacement=\&]
+% 	\& {(3,0,1,2)} \& {(3,0,1,2)} \\
+% 	{(2,0,0,2)} \&\&\& {(2,0,0,2)} \\
+% 	\& {(3,0,1,2)} \& {(3,0,1,2)} \\
+% 	\& {(3,0,1,2)} \& {(3,0,1,2)} \\
+% 	{(2,0,0,2)} \&\&\& {(2,0,0,2)} \\
+% 	\& {(3,0,1,2)} \& {(3,0,1,2)}
+% 	\arrow[no head, from=1-3, to=2-4]
+% 	\arrow[no head, from=2-4, to=3-3]
+% 	\arrow[no head, from=3-3, to=3-2]
+% 	\arrow[no head, from=3-2, to=2-1]
+% 	\arrow[no head, from=2-1, to=1-2]
+% 	\arrow[no head, from=4-3, to=5-4]
+% 	\arrow[no head, from=5-4, to=6-3]
+% 	\arrow[no head, from=6-3, to=6-2]
+% 	\arrow[no head, from=6-2, to=5-1]
+% 	\arrow[no head, from=5-1, to=4-2]
+% 	\arrow[no head, from=4-2, to=4-3]
+% 	\arrow[no head, from=4-2, to=6-2]
+% 	\arrow[no head, from=4-3, to=6-3]
+% 	\arrow[no head, from=1-2, to=1-3]
+% 	\arrow[no head, from=3-2, to=1-3]
+% 	\arrow[no head, from=1-2, to=3-3]
+% \end{tikzcd}\]
+% Order the vectors and relabel.
+% % https://q.uiver.app/?q=WzAsMTIsWzIsMCwiMiJdLFszLDEsIjEiXSxbMiwyLCIyIl0sWzEsMiwiMiJdLFswLDEsIjEiXSxbMSwwLCIyIl0sWzIsMywiMiJdLFszLDQsIjEiXSxbMiw1LCIyIl0sWzEsNSwiMiJdLFswLDQsIjEiXSxbMSwzLCIyIl0sWzAsMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDIsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMiwzLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzMsNCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs0LDUsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw3LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzcsOCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs4LDksIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbOSwxMCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMCwxMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMSw2LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzExLDksIiIsMSx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw4LCIiLDEseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzUsMCwiIiwxLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFszLDAsIiIsMSx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNSwyLCIiLDEseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+% \[\begin{tikzcd}[ampersand replacement=\&]
+% 	\& 2 \& 2 \\
+% 	1 \&\&\& 1 \\
+% 	\& 2 \& 2 \\
+% 	\& 2 \& 2 \\
+% 	1 \&\&\& 1 \\
+% 	\& 2 \& 2
+% 	\arrow[no head, from=1-3, to=2-4]
+% 	\arrow[no head, from=2-4, to=3-3]
+% 	\arrow[no head, from=3-3, to=3-2]
+% 	\arrow[no head, from=3-2, to=2-1]
+% 	\arrow[no head, from=2-1, to=1-2]
+% 	\arrow[no head, from=4-3, to=5-4]
+% 	\arrow[no head, from=5-4, to=6-3]
+% 	\arrow[no head, from=6-3, to=6-2]
+% 	\arrow[no head, from=6-2, to=5-1]
+% 	\arrow[no head, from=5-1, to=4-2]
+% 	\arrow[no head, from=4-2, to=4-3]
+% 	\arrow[no head, from=4-2, to=6-2]
+% 	\arrow[no head, from=4-3, to=6-3]
+% 	\arrow[no head, from=1-2, to=1-3]
+% 	\arrow[no head, from=3-2, to=1-3]
+% 	\arrow[no head, from=1-2, to=3-3]
+% \end{tikzcd}\]
+% Iterate.
+% % https://q.uiver.app/?q=WzAsMTIsWzIsMCwiKDIsMSwyKSJdLFszLDEsIigxLDAsMikiXSxbMiwyLCIoMiwxLDIpIl0sWzEsMiwiKDIsMSwyKSJdLFswLDEsIigxLDAsMikiXSxbMSwwLCIoMiwxLDIpIl0sWzIsMywiKDIsMSwyKSJdLFszLDQsIigxLDAsMikiXSxbMiw1LCIoMiwxLDIpIl0sWzAsNCwiKDEsMCwyKSJdLFsxLDMsIigyLDEsMikiXSxbMSw1LCIoMiwxLDIpIl0sWzAsMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDIsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMiwzLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzMsNCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs0LDUsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw3LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzcsOCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs5LDEwLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEwLDYsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw4LCIiLDEseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzUsMCwiIiwxLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFszLDAsIiIsMSx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNSwyLCIiLDEseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzgsMTEsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTEsOSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMCwxMSwiIiwxLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dXQ==
+% \[\begin{tikzcd}[ampersand replacement=\&]
+% 	\& {(2,1,2)} \& {(2,1,2)} \\
+% 	{(1,0,2)} \&\&\& {(1,0,2)} \\
+% 	\& {(2,1,2)} \& {(2,1,2)} \\
+% 	\& {(2,1,2)} \& {(2,1,2)} \\
+% 	{(1,0,2)} \&\&\& {(1,0,2)} \\
+% 	\& {(2,1,2)} \& {(2,1,2)}
+% 	\arrow[no head, from=1-3, to=2-4]
+% 	\arrow[no head, from=2-4, to=3-3]
+% 	\arrow[no head, from=3-3, to=3-2]
+% 	\arrow[no head, from=3-2, to=2-1]
+% 	\arrow[no head, from=2-1, to=1-2]
+% 	\arrow[no head, from=4-3, to=5-4]
+% 	\arrow[no head, from=5-4, to=6-3]
+% 	\arrow[no head, from=5-1, to=4-2]
+% 	\arrow[no head, from=4-2, to=4-3]
+% 	\arrow[no head, from=4-3, to=6-3]
+% 	\arrow[no head, from=1-2, to=1-3]
+% 	\arrow[no head, from=3-2, to=1-3]
+% 	\arrow[no head, from=1-2, to=3-3]
+% 	\arrow[no head, from=6-3, to=6-2]
+% 	\arrow[no head, from=6-2, to=5-1]
+% 	\arrow[no head, from=4-2, to=6-2]
+% \end{tikzcd}\]
+% % https://q.uiver.app/?q=WzAsMTIsWzIsMCwiMiJdLFszLDEsIjEiXSxbMiwyLCIyIl0sWzEsMiwiMiJdLFswLDEsIjEiXSxbMSwwLCIyIl0sWzIsMywiMiJdLFszLDQsIjEiXSxbMiw1LCIyIl0sWzEsNSwiMiJdLFswLDQsIjEiXSxbMSwzLCIyIl0sWzAsMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDIsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMiwzLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzMsNCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs0LDUsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw3LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzcsOCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs4LDksIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbOSwxMCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMCwxMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMSw2LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzExLDksIiIsMSx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw4LCIiLDEseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzUsMCwiIiwxLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFszLDAsIiIsMSx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNSwyLCIiLDEseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+% \[\begin{tikzcd}[ampersand replacement=\&]
+% 	\& 2 \& 2 \\
+% 	1 \&\&\& 1 \\
+% 	\& 2 \& 2 \\
+% 	\& 2 \& 2 \\
+% 	1 \&\&\& 1 \\
+% 	\& 2 \& 2
+% 	\arrow[no head, from=1-3, to=2-4]
+% 	\arrow[no head, from=2-4, to=3-3]
+% 	\arrow[no head, from=3-3, to=3-2]
+% 	\arrow[no head, from=3-2, to=2-1]
+% 	\arrow[no head, from=2-1, to=1-2]
+% 	\arrow[no head, from=4-3, to=5-4]
+% 	\arrow[no head, from=5-4, to=6-3]
+% 	\arrow[no head, from=6-3, to=6-2]
+% 	\arrow[no head, from=6-2, to=5-1]
+% 	\arrow[no head, from=5-1, to=4-2]
+% 	\arrow[no head, from=4-2, to=4-3]
+% 	\arrow[no head, from=4-2, to=6-2]
+% 	\arrow[no head, from=4-3, to=6-3]
+% 	\arrow[no head, from=1-2, to=1-3]
+% 	\arrow[no head, from=3-2, to=1-3]
+% 	\arrow[no head, from=1-2, to=3-3]
+% \end{tikzcd}\]
+Recall that $H'$ has a 3 cycle while $H$ does not. Thus, $H$ and $H'$ are not isomorphic. Since the algorithm terminates on a step where the two graphs have the same number of classes and the same number of vertices in each class, the naive WL isomoprhism test is unable to determine that $H$ and $H'$ are not isomorphic. 
+		\end{example}
+
+
+\begin{definition}
+	An algorithm \textit{distinguishes} two graphs $G$ and $G'$ if the algorithm can determine that $G$ and $G'$ are not isomorphic.
+\end{definition} In the previous example, we say that the Naive WL isomorphism Test does not \textit{distinguish} $H$ and $H'$. 

@@ -1,0 +1,77 @@
+\mysection{Algorithms for Graph Identification}
+For each of the following algorithms, the domain is all simple graphs on $n$ vertices. Four algorithms are presented in the order of slowest to fastest. The first two come with explicit steps. The last two require sophisticated machinery, of which this project is only an introduction. Therefore, these two faster algorithms are discussed from a high level. The final section in this chapter is dedicated to comparing the running times of these four algorithms. The first algorithm is brute force. The second is brute force, but with a preprocessing step of WL that often results in a shorter running time. The third is from \cite{babai1983canonical,babai1983computational} based on \cite{luks1982,zemlyachenko1982isomorphism}. The final algorithm is the fastest known, from \cite{babai2016,babai2018}. The input for each algorithm is two simple graphs $G_k=(V_k,E_k)$, $k=1,2$.
+\begin{remark}
+	 The results cited contain instructions for how the graph isomorphism problem could be solved under a certain time constraint. However, especially regarding \cite{babai2016,babai2018}, it is not totally clear how these instructions would be implemented. Although the proofs in each are constructive, none presents an implementation of their instructions. 
+\end{remark}
+\subsection{Brute Force}
+%  This we choose a pair of graphs, $G_1=(V_1,E_1)$ and $G_2=(V_2,E_2)$ from our domain. We now need a set of instructions that will produce a $+1$ if $G_1\cong G_2$ or $-1$ otherwise. Recall that $G_1\cong G_2$ if and only if there exists a graph isomorphism from $G_1$ to $G_2$. Although not required for solving the GI problem,since every graph isomorphism is a bijective function, a brute-force method that will solve the GI problem is to check every possible bijection between the vertex sets. This set of bijections is the set of permutations on $n$ objects. 
+  After initialization, the brute force algorithm outlined below operates as follows. Pick $\sigma\in$ Sym$(V_1)$. Construct $\sigma(G_1)$ based on the following definition.
+	\begin{definition}
+		For a graph $G=(V,E)$ and $\sigma\in$ Sym$(V)$, define $\sigma(V):=\{\sigma(v):v\in V\} $, $\sigma(E):=\{\{\sigma(u),\sigma(v)\}:\{u,v\}\in E\}$, and $\sigma(G):=(\sigma(V),\sigma(E))$.
+	\end{definition}
+	Iterate this process until $A(\sigma(G_1))=A(G_2)$ is true or  Sym$(V_1)$ is exhausted.
+	
+	\begin{example}
+		In the following example, assume $|V_1|=|V_2|=n$.
+		\begin{align*}
+			&\textbf{Brute Force Graph Identification Algorithm}\\
+		\textbf{Input:}&\;G_1=(V_1,E_1),\;G_2=(V_2,E_2)\\
+		\textbf{Initialize:}&\text{ Construct }A(G_1),\;A(G_2)\text{ and generate Sym}(V_1)\\
+		\textbf{Iterate:}&\text{ For }\sigma_k\in\text{Sym}(V_1)\text{ compute }A(\sigma_k(G_1))\text{ and evaluate }A(\sigma_k(G_1))=A(G_2).\\&\text{If }A(\sigma_k(G_1))=A(G_2)\text{ True, return }+1\\
+		\textbf{Output:}&+1\text{ if returned during Iterate; } -1\text{ otherwise}
+		\end{align*}
+		\begin{remark}
+	On graphs with large order, even the initialization step of this algorithm is prohibively time consuming because it generates Sym$(V_1)$. However, the rest of the algorithm is even slower. Slow enough that the time lost in the initialization step is inconsequential in the running time analysis of the algorithm as a whole.
+		\end{remark}
+		We now evaluate the run time of this algorithm. First, the adjacency matrix for each graph is created and Sym$(V_1)$ is generated. Since the adjacency matrix is symmetric and has zeros on the diagonal, creating the adjacency matrices requires $2{n\choose 2}+2=\mathcal{O}(n^2)$ steps. To generate Sym$(V_1)$, we first label the vertices in $V_1$ using integers $1,2,\dots,n$ then apply an algorithm with an optimal run time of $\mathcal{O}((n+1)!)$ (see \cite{johnson1963generation,heap1963permutations}). Next, in the $k$th iteration, the algorithm checks if $A(\sigma_k(G_1))=A(G_2)$. This step requires ${n\choose 2}=\mathcal{O}(n^2)$ comparisons to ensure each unique vertex pair is checked. Since we must iterate over every possible permutation, we repeat this step $n!$ times.
+		%  The bulk of the time will be on the iterations. However, we will get different results depending on how we define a step. One approach is to consider checking $A(\sigma_k(G_1))=A(G_2)$ a single step. Since the time it takes to complete this step will remain approximately constant regardless of the iteration, this is a reasonable choice. In this case, at worst we have $n!$ steps, resulting in a runtime of $\mathcal{O}(n!)$. However, you may recall that checking requires ${n\choose 2}$ operations. This is a nontrivial amount of operations to perform every iteration. We may wish then to define a step to be a floating point operation. In this case, we must look closer at each part of the algorithm, then apply the definition of $\mathcal{O}$ to find the runtime. For the Initialize step, labelling the vertex sets is accomplished in $2n$ steps while labelling the symmetric group takes $n!$. On the Iterate step, there are five tasks:
+		% \begin{enumerate}
+		% 	\item apply $\sigma_k$ to every entry in $V_1$: $n$ steps;
+		% 	\item permute the rows and columns of the new adjacency matrix based on the induced action of $\sigma_k$ on $V$: $n+n=2n$ steps;
+		% 	\item check $A(\sigma_k(G_1))=A(G_2)$ by only looking at the upper right triangle: ${n\choose 2}$ steps;
+		% 	\item perform $k+1$: 1 step
+		% \end{enumerate} 
+		As $n$ gets large, the dominating factor with respect to steps is $n!{n\choose 2}$. We can estimate the runtime as follows. 
+		\[n!{n\choose 2}=\frac{n!n!}{(n-2)!2}=\frac{n!(n)(n-1)}{2}=\mathcal{O}((n+2)!).\]
+		Thus, the worst-case runtime of this algorithm is $\mathcal{O}((n+2)!)$. This should intuitively make sense because there are $n!$ possible permutations and ${n\choose 2}$ entries to check for each permutation, where ${n\choose2}\approx n^2$ for large $n$.
+	\end{example}
+	\begin{theorem}
+		Brute Force Graph Identification has runtime $\mathcal{O}((n+2)!)$.
+	\end{theorem}
+	\begin{proof}
+		We write out the steps and the frequency of each step. Observe,
+		\[\begin{tabular}{|c|c|c|c|}
+			\hline
+			& Steps&Frequency&Total\\
+			\hline
+			Initialize&$(n+1)!+n^2$&1&$n^2+(n+1)!$\\
+			\hline
+			Iterate&${n\choose 2}$&$n!$&${n\choose2}(n!)$\\
+			\hline
+			Output&1&1&1\\
+			\hline
+		\end{tabular}\]
+		Summing the entries of the Total column, we have\[f(n)=n^2+(n+1)!+{n\choose2}(n!)+1.\]
+		Let $n_0=10$ and suppose $n>n_0$. Observe,
+		\begin{align*}
+			f(n)&=(n+1)!+{n\choose2}(n!)+1=(n+1)!+\frac{n!n!}{(n-2)!2}+1=(n+1)!+\frac{n!(n)(n-1)}{2}+1\\
+			&\le(n+1)!+n!(n)(n-1)\le(n+1)!+(n+2)!\le2((n+1)!).
+		\end{align*}
+		Hence, $f(n)=\mathcal{O}((n+2)!)$ where $c=2$.
+	\end{proof}
+Although the Brute Force Graph Identification Algorithm (BF) is an upper bound on the complexity of the GI, this bound is useful only as a tool for understanding the vastness of the problem. An algorithm with a factorial run time is essentially useless. 
+\subsection{Brute Force with WL}
+The following algorithm is a natural step towards a faster graph identification algorithm. The idea is to use WL to reduce the number of permutations we need to check by brute force. First, canon$(G_k)$, $k=1,2$ are generated using WL. If the amount of classes or the number of vertices per class is not the same for canon$(G_1)$ and canon$(G_2)$, the algorithm terminates, reporting $G_1$ is not isomorphic to $G_2$. Otherwise, the algorithm begins BF, but with a restricition on the elements of Sym$(V_1)$ to check. We are only interested in the permutations that preserves the class of every vertex. Specifically, we want $\sigma\in$Sym$(V_1)$ such that for all the vertex classes $l$ and for all $v\in V_1$, $v$ is in class $l$ if and only if $\sigma(v)$ is in class $l$. 
+\begin{center}
+\begin{align*}
+	&\textbf{Brute Force with WL Algorithm}\\
+\textbf{Input:}&\;G_1=(V_1,E_1),\;G_2=(V_2,E_2)\\
+\textbf{Initialize:}&\text{ Compute canon}(G_k),\;k=1,2\text{ using WL}\\&\text{Check that the canonical classes of }G_1\text{ match }G_2\\&\text{Generate }H\le\text{ Sym}(V_1)\text{ such that for all }\sigma\in H,\\&\sigma\text{ respects the classes of the canonical labelling.}\\
+\textbf{Iterate:}&\text{ For }\sigma_k\in H\text{ compute }A(\sigma_k(G_1))\text{ and evaluate }\sigma_k(canon(G_1))=canon(G_2).\\&\text{If }\sigma_k(canon(G_1))=canon(G_2)\text{ True, return }+1\\
+\textbf{Output:}&+1\text{ if returned during Iterate; } -1\text{ otherwise}
+\end{align*}
+\end{center}
+
+We now evaluate the running time of Brute Force with WL Algorithm (BFWL). Since BFWL only chance at improving on BF is by the success of WL at reducing the amount of permutations to check, we consider several cases, including the worst possible, the best possible and a general case, each based on the number of canonical classes produced by WL. In each case, we suppose that WL results in the same amount of classes and the number of vertices per class for canon$(G_1)$ and canon$(G_2)$, for otherwise each case would terminate immediately after WL, reporting $G_1$ is not isomorphic to $G_2$.
+\paragraph{}For the first case, suppose the output of WL is a single class. If each graph has this same single class, this is the worst possible result. Any vertex may be sent to any other vertex by a permutation and respect the the classes. The impact is that BFWL must search the entire permutation group, which means the running time will be equivalent to BF. 
+\paragraph{}For the second case, suppose the number of canonical classes is equal to the number of vertices, that is, every vertex receives their own class. This is the best possible result, as we know immediately that the input graphs are isomorphic. 

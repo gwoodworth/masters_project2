@@ -1,0 +1,16 @@
+\begin{thebibliography}{3}
+\providecommand{\natexlab}[1]{#1}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[{\textit{Babai}(2016)}]{babai2016}
+Babai, L. (2016), Graph isomorphism in quasipolynomial time [extended abstract], in \textit{Proceedings of the Forty-Eighth Annual ACM Symposium on Theory of Computing}, STOC '16, p. 684–697, Association for Computing Machinery, New York, NY, USA, \doi{10.1145/2897518.2897542}.
+
+\bibitem[{\textit{Babai}(2018)}]{babai2018}
+Babai, L. (2018), Group, graphs, algorithms: the graph isomorphism problem, in \textit{Proceedings of the International Congress of Mathematicians: Rio de Janeiro 2018}, pp. 3319--3336, World Scientific.
+
+\bibitem[{\textit{Luks}(1982)}]{luks1982}
+Luks, E.~M. (1982), Isomorphism of graphs of bounded valence can be tested in polynomial time, \textit{Journal of computer and system sciences}, \textit{25}(1), 42--65.
+
+\end{thebibliography}

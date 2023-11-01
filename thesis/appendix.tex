@@ -1,0 +1,42 @@
+\section{Appendix}
+\subsection{Running time}
+\begin{theorem}
+	Brute Force Graph Identification has runtime $\mathcal{O}((n+2)!)$.
+\end{theorem}
+\begin{proof}
+	We write out the steps and the frequency of each step. Observe,
+	\[\begin{tabular}{|c|c|c|c|}
+		\hline
+		& Steps&Frequency&Total\\
+		\hline
+		Initialize&$(n+1)!+n^2$&1&$n^2+(n+1)!$\\
+		\hline
+		Iterate&${n\choose 2}$&$n!$&${n\choose2}(n!)$\\
+		\hline
+		Output&1&1&1\\
+		\hline
+	\end{tabular}\]
+	Summing the entries of the Total column, we have\[f(n)=n^2+(n+1)!+{n\choose2}(n!)+1.\]
+	Let $n_0=10$ and suppose $n>n_0$. Observe,
+	\begin{align*}
+		f(n)&=(n+1)!+{n\choose2}(n!)+1=(n+1)!+\frac{n!n!}{(n-2)!2}+1=(n+1)!+\frac{n!(n)(n-1)}{2}+1\\
+		&\le(n+1)!+n!(n)(n-1)\le(n+1)!+(n+2)!\le2((n+1)!).
+	\end{align*}
+	Hence, $f(n)=\mathcal{O}((n+2)!)$ where $c=2$.
+\end{proof}
+\subsection{Babai's Algorithm}
+The following is an overview of \cite{babai2016,babai2018}. Babai's goal is to use a "Divide-and-Conquer" recursive method, pioneered in \cite{luks1982}. 
+\begin{definition}
+	Let $\mathcal{A}$ be an algorithm with an input of size $n$ and $q(n)$ be the number of smaller instances $n$ is reduced to. Ignoring the additive cost of assembling all information from smaller instances,
+	\[f(\mathcal{A},n)\le q(n)f(\mathcal{A},0.9n).\] 
+\end{definition}
+Here is a high level view taken from \cite{babai2018,babai2016} on how his algorithm divides the GI into smaller instances (see Appendix for most definitions):
+\begin{enumerate}
+	\item Reduce GI to the more general String Isomorphism Problem (SI) (see Section III)
+	\item Solve SI in quasipolynomial time via:
+	\subitem{a.} Follow \cite{luks1982} algorithm until hitting a bottlenock
+	\subitem{b.} At a bottleneck, an "ideal domain" $\Gamma$ is revealed. 
+	\subsubitem{i.}Use a group theoretic algorithm called "Local Certificates" to construct a canonical structure on the domain.
+	\subsubitem{ii.} Use combinatroial partitioning algorithms to reducee the size of $\Gamma$.
+	\subsubitem{iii.} Use individualization (i.e., Weisfeiler-Lehman) to individualize each element of $\Gamma$, which reduces the size of the input string.
+\end{enumerate}

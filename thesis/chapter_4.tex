@@ -1,0 +1,59 @@
+\section{Introduction to Luks' Algorithm}
+\subsection{Definitions}
+The following defintions come directly from \cite{luks1982}
+\begin{definition}
+    A subset $G$ of $\Sym(A)$ is said to \textit{stabilize} $B\subseteq A$ if for all $\sigma\in G$, $\sigma(B)=B$. In such a case, we call the set $G_B=\{\sigma\in G:\sigma(B)=B\}$ the \textit{stabilizer} of $B$ in $G$. 
+\end{definition}
+\begin{definition}
+    If $G\subseteq\Sym(A)$ acts on $B\subseteq A$ and there exist $b\in B$ such that $B=\{\sigma(b):\sigma\in G\}$, we say $G$ acts \textit{transitively} on $B$.
+\end{definition}
+\begin{definition}
+    If $G\subseteq\Sym(A)$ acts transitively on $A$, $B\subset A$, $B\ne\emptyset, A$, and for all $\sigma,\tau\in G$, $\sigma(B)=\tau(B)$ or $\sigma(B)\cap\tau(B)=\emptyset$, then we say $B$ is a $G$-\textit{block}.
+\end{definition}
+\begin{definition}
+    If $B$ is a $G$-block, we call $\{\sigma(B):\sigma\in G\}$ a $G$-\textit{block system in} $A$.
+\end{definition}
+\begin{remark}
+    Given a $G$-block system, $G$ acts transitvely on the blocks of the system.
+\end{remark}
+\begin{definition}
+    If there are no $G$-blocks in a $G$-block system in $A$ of size $>1$, we say $G$ acts \textit{primitvely} on $A$
+\end{definition}
+\begin{definition}
+    A $G$-block system is \textit{minimal} if $G$ acts primitvely on the blocks.
+\end{definition}
+\begin{remark}
+    It is the number of blocks that is minimal.
+\end{remark}
+\begin{proposition}
+    If for a finite set $A$, $G\le\Sym(A)$ acts transitively on $A$ and $B$ is a $G$-block on $A$ containing the element $a$ in $A$, then $G_B$ defined by $G_{B}=\{\sigma\in G:\sigma(B)=B\}$ is a subgroup of $G$ containing the stabilizer of $a$ in $G$, $G_a=\{\sigma\in G:\sigma(a)=a\}$.\cite[117]{dummit2004abstract}
+\end{proposition}
+\begin{proof}
+Let $\sigma,\tau\in G_B$. Observe,
+\begin{align*}
+    (\sigma\tau^{-1})(B)&=\sigma(\tau^{-1}(B))=\sigma(\tau^{-1}(\tau(B)))\\
+    &=\sigma((\tau^{-1}\tau)(B))=\sigma(B)=B.
+\end{align*}
+Thus, $G_B\le G$. Let $\gamma\in G_a$. Since $B$ is a $G$-block on $A$, $\gamma(B)=B$ or $\gamma(B)\cap B=\emptyset$. Since $\gamma(a)=a$ and $a\in B$, we know $\gamma(B)=B$. Hence, $G_a\le G_B$.
+\end{proof}
+\begin{proposition}
+    For any finite set $A$ where $G\le\Sym(A)$ acts transitively on $A$, $G$ is primitive on $A$ if and only if $G_a$ is a maximal subgroup of $G$.\cite[117]{dummit2004abstract}  
+\end{proposition}
+\begin{proof}
+    From Proposition 4.1, we know that $G_a$
+\end{proof}
+\begin{lemma}Let $P$ be a transitive $p$-subgroup of Sym$(A)$ with $|A|>1$. Then any minimal $P$-block system consists of exactly $p$ block. Furthermore, the subgroup $P'$ which stabilizes all of the blocks has index $p$ in $P$ (Luks 1982). 
+\end{lemma}
+\begin{proof}
+    Let $B$ be the set of blocks in a minimal $P$-block system. The action of $P$ on $A$ induces an action on $B$. Then there exist homomorphism $\phi:P\rightarrow\Sym(B)$, where $\ker\phi=P'$. By the First Isomorphism Theorem, \[P/P'\cong\im(\phi)\le\Sym(B).\]
+    Note any permutation group is primitive if and only if it is transtivie and its point stabililzer is a maximal subgroup. Moreover, all maximal subgroups of a finite p-group have index $p$ and are normal. Thus, any primitive $p$-subgroup of $\Sym(B)$ has order $p$ and acts regularly on $B$. Hence, $|B|=|P/P'|=$ the number of blocks $=p$.(Professor Derek Holt on Stack Exchange https://math.stackexchange.com/questions/2912055/question-about-lemma-on-primitive-groups )
+% We show $P/P'$ is a primitive $p$-group acting on the blocks. For a contradiction, suppose $P/P'$ is not primitive. Then 
+\end{proof}
+% The following theorem is the main result of \cite{luks1982}. 
+\begin{definition}
+    Given a set of generators for a group $G$ of permutations of a colored set $A$, the \textit{Color Automorphism Problem} for $G$ involves finding generators for the subgroup of $G$ which stabilizes the color classes.
+\end{definition}
+
+\begin{definition}
+NEED stabilize, transitive, G-block, primitive
+\end{definition}

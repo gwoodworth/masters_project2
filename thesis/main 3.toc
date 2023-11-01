@@ -1,0 +1,11 @@
+\contentsline {section}{Title Page}{i}{}%
+\contentsline {section}{Abstract}{iii}{}%
+\contentsline {paragraph}{}{iii}{}%
+\contentsline {section}{Table of Contents}{v}{}%
+\contentsline {section}{List of Figures}{vii}{}%
+\contentsline {section}{Acknowledgments}{ix}{}%
+\contentsline {section}{Introduction}{1}{}%
+\contentsline {subsection}{\numberline {1.1}Preliminaries}{1}{}%
+\contentsline {subsection}{\numberline {1.2}The Graph Isomorphism Problem}{4}{}%
+\contentsline {section}{Weisfeler Lehman Algorithm}{7}{}%
+\contentsline {section}{References}{13}{}%

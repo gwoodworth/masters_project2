@@ -1,0 +1,402 @@
+\section{Introduction}
+This section contains preliminaries (1.1) and the definition of the GI problem (1.2). Section 2 introduces an algorithm for determining that two graphs are not isomorphic based on Weisfeiler-Lehman (WL) canonical refinement. Section 3 introduces the String Isomorphism Problem and shows how to change the GI problem into the SI problem. Section 4 contains an introduction to \cite{luks1982}, including some of the algebra unerpinning Babai's approach. Last, Section 5 is the conclusion.
+\subsection{Preliminaries}
+\begin{definition}%\label{def:def111}
+A \textit{simple graph} is an ordered pair $G=(V,E)$ where $V$ is a set, called the vertices of $G$, and $E$ is a set of unordered pairs of vertices from $V$, called the edges of $G$, such that for all $u\in V$, $\{u,u\}\notin E$.  
+\end{definition}
+\begin{definition}\label{def:def222}
+	For a graph $G=(V,E)$, if $\{u,v\}\in E$, we say $u$ and $v$ are \textit{adjacent} or \textit{neighbors} and we can write $u\leftrightarrow v$.
+	\end{definition}
+\begin{definition}
+	A \textit{drawing} of a graph $G$ is a geometric representation of $G$ in the plane using points and line segments where each vertex of $G$ is represented by exactly one unique point and a line segment connects two points $P$ and $Q$ in the drawing if and only if the vertices $P$ and $Q$ represent, respectively, are adjacent in $G$.
+\end{definition}
+\begin{example}
+	We construct two simple graphs, $G_1$ and $G_2$ where \begin{align*}
+		G_1&=(\{A,B,C,D,E,F\},\{\{A,B\},\{B,C\},\{C,D\},\{C,E\},\{C,F\}\})\text{ and}\\
+		G_2&=(\{1,2,3,4\},\{\{1,2\},\{1,3\},\{2,3\},\{3,4\}\}).
+	\end{align*}
+	See Figure 1.1. for a drawing of each of these graphs.
+	\begin{figure}
+% https://q.uiver.app/#q=WzAsMTIsWzAsMSwiQlxcO1xcYnVsbGV0Il0sWzEsMSwiQ1xcO1xcYnVsbGV0Il0sWzIsMSwiRVxcO1xcYnVsbGV0Il0sWzEsMiwiRlxcO1xcYnVsbGV0Il0sWzAsMCwiQVxcO1xcYnVsbGV0Il0sWzIsMCwiRFxcO1xcYnVsbGV0Il0sWzQsMSwiM1xcO1xcYnVsbGV0Il0sWzQsMCwiMVxcO1xcYnVsbGV0Il0sWzUsMCwiMlxcO1xcYnVsbGV0Il0sWzQsMiwiNFxcO1xcYnVsbGV0Il0sWzEsMywiR18xIl0sWzQsMywiR18yIl0sWzAsMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDIsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMywxLCIiLDIseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzAsNCwiIiwyLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDUsIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw3LCIiLDIseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzcsOCwiIiwyLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs4LDYsIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw5LCIiLDIseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+\[\begin{tikzcd}
+	{A\;\bullet} && {D\;\bullet} && {1\;\bullet} & {2\;\bullet} \\
+	{B\;\bullet} & {C\;\bullet} & {E\;\bullet} && {3\;\bullet} \\
+	& {F\;\bullet} &&& {4\;\bullet} \\
+	& {G_1} &&& {G_2}
+	\arrow[no head, from=2-1, to=2-2]
+	\arrow[no head, from=2-2, to=2-3]
+	\arrow[no head, from=3-2, to=2-2]
+	\arrow[no head, from=2-1, to=1-1]
+	\arrow[no head, from=2-2, to=1-3]
+	\arrow[no head, from=2-5, to=1-5]
+	\arrow[no head, from=1-5, to=1-6]
+	\arrow[no head, from=1-6, to=2-5]
+	\arrow[no head, from=2-5, to=3-5]
+\end{tikzcd}\]
+\caption{Examples of graphs}
+\end{figure}
+\end{example}
+
+\begin{remark}
+Graphs may have any number of vertices. However, unless otherwise specified, suppose any graph presented in this paper has a finite vertex set.
+\end{remark}
+
+\begin{definition}
+    Let $u$ be a vertex in a graph $G=(V,E)$. The \textit{neighborhood of} $u$ in $G$, denoted $N(u)$, is a subset of $V$ containing all of the vertices in $V$ that are adjacent to $u$ in G. The cardinality of $N(u)$ is the \textit{degree} of the vertex $u$, denoted $\deg(u)$.
+\end{definition}
+\begin{example}
+	Consider the graph in Figure 1.2. There are two edges in this graph, $\{u,v\}$ and $\{u,w\}$. Thus, we may write $u\leftrightarrow v$ and $u\leftrightarrow w$. Note $N(u)=\{v,w\}$ so that $\deg(u)=2$. Since $t$ is not adjacent to any vertices, we may write $N(t)=\emptyset$ and $\deg(t)=0$.
+	\begin{figure}
+% https://q.uiver.app/#q=WzAsNCxbMSwwLCJ1XFw7XFxidWxsZXQiXSxbMiwwLCJcXGJ1bGxldFxcO3YiXSxbMiwxLCJcXGJ1bGxldFxcO3ciXSxbMCwwLCJcXGJ1bGxldFxcO3QiXSxbMCwxLCIiLDIseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzAsMiwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dXQ==
+\[\begin{tikzcd}
+	{\bullet\;t} & {u\;\bullet} & {\bullet\;v} \\
+	&& {\bullet\;w}
+	\arrow[no head, from=1-2, to=1-3]
+	\arrow[no head, from=1-2, to=2-3]
+\end{tikzcd}\]
+\caption{Adjacent and non-adjacent vertices}
+\end{figure}
+\end{example}
+\begin{definition}
+    Given a graph $G=(V,E)$ where $V=\{1,2,\dots,n\}$, the \textit{adjacency matrix} $A(G)=(a_{ij}),$ where $a_{ij}=1$ if vertex $i$ and $j$ are adjacent, otherwise $a_{ij}=0$. If $G$ is undirected and simple, $a_{ij}=a_{ji}$ and $a_{ii}=0$.
+\end{definition}
+
+\begin{definition}\label{def:def333}
+Two graphs, $G=(V,E)$ and $G'=(V',E')$, are \textit{isomorphic}, denoted $G\cong G'$, if there exists a bijection $f:V\rightarrow V'$ such that for every $u,v\in V$, $\{u,v\}\in E$ if and only if $\{f(u),f(v)\}\in E'$. If such a function $f$ exists, we call $f$ a \textit{graph isomorphism} from $G$ to $G'$ (if $G=G'$, we call $f$ a \textit{graph automorphism}).
+\end{definition}
+\begin{remark}
+	In case we want the adjacency matrix of a graph $G=(V,E)$ where $|V|=n$ but $V\ne\{1,2,\dots,n\}$, there exists bijection $\phi:V\rightarrow\{1,2,\dots,n\}$ so that for $E'=\{\{\phi(u),\phi(v)\}:\{u,v\}\in E\}$ where $G'=(\{1,2,\dots,n\},E')$, $G\cong G'$. Define $A(G):=A(G')$.
+\end{remark}
+\begin{definition}
+	The \textit{symmetric group} over a set $A$, $|A|=n$, is denoted Sym$(A)$ when we require the elements of $A$ explicitly or simply $S_n$ otherwise.
+\end{definition}
+\begin{definition}
+	If $A=(a_{ij})$ is an $(n\times m)$-matrix, $g\in$ Sym$(n)$ and $h\in$ Sym$(m)$, define $g^{-1}Ah=(a_{gi,hj})$ \cite{weisfeiler1976construction}.
+\end{definition}
+\begin{remark}
+	In the previous definition, $g^{-1}Ah$ is a matrix obtained by permuting the rows and columns of $A$ by $g$ and $h$, respectively.
+\end{remark}
+\begin{proposition}
+	Two graphs $G_1=(V_1,E_1)$ and $G_2=(V_2,E_2)$ are isomorphic if and only if there exists $\sigma\in$ Sym$(|V_1|)$ such that $\sigma^{-1}A(G_1)\sigma=A(G_2)$.
+\end{proposition}
+\begin{proof}
+	$\Rightarrow$ Suppose $G_1\cong G_2$. Without loss of generality, $|V_1|=|V_2|=n$. There exist $A(G_1)$ and $A(G_2)$. For $k=1,2$, $A(G_k)$ induces a natural bijection $\phi_k:V_k\rightarrow\{1,2,\dots,n\}$ as in the remark above.
+	%defined by $\phi(u)=i$ where  $N(U)$ is represented by row $i$ and column $i$ of $A(G_k)$
+	For $u,v\in V_k$ where $i=\phi_k(u)$, $j=\phi_k(v)$, and $a_{ij}\in A(G_k)$
+	\begin{align}
+		\{u,v\}\in E_k&\text{ if and only if }a_{ij}=1.
+	\end{align} Since $G_1\cong G_2$, there exist bijection $f:V_1\rightarrow V_2$ such that $\{u,v\}\in E_1$ if and only if $\{f(u),f(v)\}\in E_2$. Define $\sigma:=\phi_2\circ f\circ\phi_1^{-1}$. Evidently $\sigma:\{1,2\dots,n\}\rightarrow\{1,2,\dots,n\}$ is bijective as a composition of bijections. Thus, $\sigma\in$ $S_n$. Let $a_{ij}\in A(G_1)$. There exist $u,v\in V_1$ such that $u=\phi_1^{-1}(i)$ and $v=\phi_1^{-1}(j)$. Then $\sigma(i)=\phi_2(f(u))$ and $\sigma(j)=\phi_2(f(v))$. Since $\{u,v\}\in E_1$ if and only if $\{f(u),f(v)\}\in E_2$, applying $(1.1)$ yields \begin{align}a_{ij}=1 \iff\{f(u),f(v)\}\in E_2.\end{align} Applying (1.1) again yields \begin{align}\{f(u),f(v)\}\in E_2\iff a_{\phi_2(f(u)),\phi_2(f(v))}=1.\end{align} Since $\sigma(i)=\phi_2(f(u))$ and $\sigma(j)=\phi_2(f(v))$, we have\[a_{ij}=1\iff a_{\sigma(i),\sigma(j)}=1.\]Hence, $\sigma^{-1}A(G_1)\sigma=A(G_2)$.\\
+	$\Leftarrow$ This direction mirrors the proof shown above and is left to the reader.
+	% Define bijections $\phi_k:V_k\rightarrow\{1,2,\dots,n\}$. Define $f:V_1\rightarrow V_2$ by $f:=\phi_2^{-1}\circ\sigma\circ\phi_1$. Evidently $f$ is bijective as a composition of bijecitons. Let $i=\phi_1^{-1}(u)$, $j=\phi_1^{-1}(v)$. We have $a_{ij}=1$ if and only if $a_{\sigma(i),\sigma(j)}=1$. Thus, $\{u,v\}\in E_1$ if and only if $\{f(u),f(v)\}\in E_2$.
+	
+	% Define $i:=\phi_1(u)$ and $j:=\phi_1(v)$ and $a_{ij}=1$ if and only if Define $\sigma:V_1\rightarrow V_1$ by $\sigma(u)=(\phi_2\circ f\circ\phi_1^{-1})(u)$is a bijection so that  There exist $\sigma\in$ Sym$(|V_1|)$ such that $\sigma(i)=$
+\end{proof}
+\pagebreak
+% It is a simple exercise to show that two graphs and  are isomorphic if and only if there exists $\sigma\in$ Sym$(V_2)$ such that $\sigma A(G_1)=A(G_2)$
+% \begin{corollary}
+% 	Two graphs $G_1=(V_1,E_1)$ and $G_2=(V_2,E_2)$ are isomorphic if and only if there exists $\sigma\in$ Sym$(V_1)$ such that $\sigma^{-1}A(G_1)\sigma=A(G_2)$.
+% \end{corollary}
+\begin{example}
+One way to think about two graphs being isomorphc is that two graphs are isomorphic if a drawing of one graph can be rearranged to another drawing without breaking or removing any edges to produce the other graph. See Figure 1.3 and Figure 1.4.
+    \begin{figure}
+        % https://q.uiver.app/?q=WzAsMTQsWzIsMSwiXFxidWxsZXQiXSxbMSwwLCJcXGJ1bGxldCAiXSxbMCwxLCJcXGJ1bGxldCAiXSxbMiwyLCJcXGJ1bGxldCAiXSxbMSwzLCJcXGJ1bGxldCAiXSxbMCwyLCJcXGJ1bGxldCJdLFs0LDAsIlxcYnVsbGV0Il0sWzMsMSwiXFxidWxsZXQiXSxbMywyLCJcXGJ1bGxldCJdLFs0LDMsIlxcYnVsbGV0Il0sWzUsMiwiXFxidWxsZXQiXSxbNSwxLCJcXGJ1bGxldCJdLFsxLDQsIkciXSxbNCw0LCJHJyJdLFswLDEsIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSwyLCIiLDIseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzIsMywiIiwyLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFszLDQsIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNCw1LCIiLDIseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzUsMCwiIiwyLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs2LDcsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNyw4LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzgsOSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs5LDEwLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEwLDExLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzExLDYsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XV0=
+        \[\begin{tikzcd}[ampersand replacement=\&]
+            \& {\bullet } \&\&\& \bullet \\
+            {\bullet } \&\& \bullet \& \bullet \&\& \bullet \\
+            \bullet \&\& {\bullet } \& \bullet \&\& \bullet \\
+            \& {\bullet } \&\&\& \bullet \\
+            \& G \&\&\& {G'}
+            \arrow[no head, from=2-3, to=1-2]
+            \arrow[no head, from=1-2, to=2-1]
+            \arrow[no head, from=2-1, to=3-3]
+            \arrow[no head, from=3-3, to=4-2]
+            \arrow[no head, from=4-2, to=3-1]
+            \arrow[no head, from=3-1, to=2-3]
+            \arrow[no head, from=1-5, to=2-4]
+            \arrow[no head, from=2-4, to=3-4]
+            \arrow[no head, from=3-4, to=4-5]
+            \arrow[no head, from=4-5, to=3-6]
+            \arrow[no head, from=3-6, to=2-6]
+            \arrow[no head, from=2-6, to=1-5]
+        \end{tikzcd}\]
+        \caption{$G\cong G'$}
+        \end{figure}
+        \begin{figure}
+           % https://q.uiver.app/?q=WzAsMTQsWzIsMCwiXFxidWxsZXQiXSxbMywxLCJcXGJ1bGxldCJdLFsyLDIsIlxcYnVsbGV0Il0sWzEsMiwiXFxidWxsZXQiXSxbMCwxLCJcXGJ1bGxldCJdLFsxLDAsIlxcYnVsbGV0Il0sWzcsMCwiXFxidWxsZXQiXSxbOCwxLCJcXGJ1bGxldCJdLFs3LDIsIlxcYnVsbGV0Il0sWzYsMiwiXFxidWxsZXQiXSxbNSwxLCJcXGJ1bGxldCJdLFs2LDAsIlxcYnVsbGV0Il0sWzEsMywiSCJdLFs3LDMsIkgnIl0sWzAsMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDIsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMiwzLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzMsNCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs0LDUsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw3LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzcsOCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs4LDksIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbOSwxMCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMCwxMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMSw2LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzExLDksIiIsMSx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw4LCIiLDEseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzUsMCwiIiwxLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFszLDAsIiIsMSx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNSwyLCIiLDEseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+\[\begin{tikzcd}[ampersand replacement=\&]
+	\& \bullet \& \bullet \&\&\&\& \bullet \& \bullet \\
+	\bullet \&\&\& \bullet \&\& \bullet \&\&\& \bullet \\
+	\& \bullet \& \bullet \&\&\&\& \bullet \& \bullet \\
+	\& H \&\&\&\&\&\& {H'}
+	\arrow[no head, from=1-3, to=2-4]
+	\arrow[no head, from=2-4, to=3-3]
+	\arrow[no head, from=3-3, to=3-2]
+	\arrow[no head, from=3-2, to=2-1]
+	\arrow[no head, from=2-1, to=1-2]
+	\arrow[no head, from=1-8, to=2-9]
+	\arrow[no head, from=2-9, to=3-8]
+	\arrow[no head, from=3-8, to=3-7]
+	\arrow[no head, from=3-7, to=2-6]
+	\arrow[no head, from=2-6, to=1-7]
+	\arrow[no head, from=1-7, to=1-8]
+	\arrow[no head, from=1-7, to=3-7]
+	\arrow[no head, from=1-8, to=3-8]
+	\arrow[no head, from=1-2, to=1-3]
+	\arrow[no head, from=3-2, to=1-3]
+	\arrow[no head, from=1-2, to=3-3]
+\end{tikzcd}\]
+\caption{$H$ is not isomorphic to $H'$. Observe that $H'$ contains a 3-cycle and $H$ does not.}
+        \end{figure}
+\end{example}
+If two graphs are isomorphic, then they share every graph property, other than possibly the names of vertices. The contrapositive of that statement is as follows. If there exist \text{any} graph property that two graphs do not share, except the names of vertices, then those two graphs are \textit{not} isomorphic. Therefore, knowledge of some properties of two graphs $G$ and $G'$ can sometimes allow us to easily determine that $G$ and $G'$ are not isomorphic. To that end, the following definitions are useful. 
+\begin{definition}
+	The \textit{degree sequence} of a graph $G=(V,E)$ is a monotonic increasing sequence of integers $d_1,d_2,\dots,d_n$ where $|V|=n$ and $d_i=deg(v_i)$ for all $v_i\in V$.
+\end{definition}
+\begin{definition}
+    A \textit{walk} in a graph $G=(V,E)$ is a list $(v_1,v_2,\dots,v_k)$ of vertices such that for $2\le i\le k$, $\{v_{i-1},v_i\}\in E$.
+\end{definition}
+\begin{example}
+	In Figure 1.5, $(u,w,t,v,w)$ is an example of a walk, shown in blue.
+	\begin{figure}
+		% https://q.uiver.app/#q=WzAsMTAsWzAsMSwiYVxcO1xcYnVsbGV0IixbMCw2MCw2MCwxXV0sWzEsMSwiYlxcO1xcYnVsbGV0IixbMCw2MCw2MCwxXV0sWzIsMSwiZVxcO1xcYnVsbGV0IixbMCw2MCw2MCwxXV0sWzEsMCwiZFxcO1xcYnVsbGV0IixbMCw2MCw2MCwxXV0sWzMsMSwiXFxidWxsZXRcXDtmIixbMCw2MCw2MCwxXV0sWzEsMiwiY1xcO1xcYnVsbGV0Il0sWzUsMSwidVxcO1xcYnVsbGV0IixbMjQwLDYwLDYwLDFdXSxbNiwxLCJcXGJ1bGxldFxcO3ciLFsyNDAsNjAsNjAsMV1dLFs1LDAsInZcXDtcXGJ1bGxldCIsWzI0MCw2MCw2MCwxXV0sWzYsMCwiXFxidWxsZXRcXDt0IixbMjQwLDYwLDYwLDFdXSxbMCwxLCIiLDAseyJjb2xvdXIiOlswLDYwLDYwXSwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDIsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSwzLCIiLDAseyJjb2xvdXIiOlswLDYwLDYwXSwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFszLDIsIiIsMSx7ImNvbG91ciI6WzAsNjAsNjBdLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzIsNCwiIiwxLHsiY29sb3VyIjpbMCw2MCw2MF0sInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSw1LCIiLDEseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzYsNywiIiwwLHsiY29sb3VyIjpbMjQwLDYwLDYwXSwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs2LDgsIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbOCw3LCIiLDIseyJjb2xvdXIiOlsyNDAsNjAsNjBdLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzcsOSwiIiwwLHsiY29sb3VyIjpbMjQwLDYwLDYwXSwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs5LDgsIiIsMCx7ImNvbG91ciI6WzI0MCw2MCw2MF0sInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XV0=
+\[\begin{tikzcd}
+	& \textcolor{rgb,255:red,214;green,92;blue,92}{d\;\bullet} &&&& \textcolor{rgb,255:red,92;green,92;blue,214}{v\;\bullet} & \textcolor{rgb,255:red,92;green,92;blue,214}{\bullet\;t} \\
+	\textcolor{rgb,255:red,214;green,92;blue,92}{a\;\bullet} & \textcolor{rgb,255:red,214;green,92;blue,92}{b\;\bullet} & \textcolor{rgb,255:red,214;green,92;blue,92}{e\;\bullet} & \textcolor{rgb,255:red,214;green,92;blue,92}{\bullet\;f} && \textcolor{rgb,255:red,92;green,92;blue,214}{u\;\bullet} & \textcolor{rgb,255:red,92;green,92;blue,214}{\bullet\;w} \\
+	& {c\;\bullet}
+	\arrow[draw={rgb,255:red,214;green,92;blue,92}, no head, from=2-1, to=2-2]
+	\arrow[no head, from=2-2, to=2-3]
+	\arrow[draw={rgb,255:red,214;green,92;blue,92}, no head, from=2-2, to=1-2]
+	\arrow[draw={rgb,255:red,214;green,92;blue,92}, no head, from=1-2, to=2-3]
+	\arrow[color={rgb,255:red,214;green,92;blue,92}, no head, from=2-3, to=2-4]
+	\arrow[no head, from=2-2, to=3-2]
+	\arrow[draw={rgb,255:red,92;green,92;blue,214}, no head, from=2-6, to=2-7]
+	\arrow[no head, from=2-6, to=1-6]
+	\arrow[draw={rgb,255:red,92;green,92;blue,214}, no head, from=1-6, to=2-7]
+	\arrow[draw={rgb,255:red,92;green,92;blue,214}, no head, from=2-7, to=1-7]
+	\arrow[draw={rgb,255:red,92;green,92;blue,214}, no head, from=1-7, to=1-6]
+\end{tikzcd}\]
+\caption{A disconnected graph $G=(V,E)$ where $V=\{a,b,c,d,e,f,u,v,t,w\}$ with a path and a walk identified}
+	\end{figure}
+\end{example}
+\begin{definition}
+	A $u,v-$\textit{path} in a graph $G=(V,E)$ is a walk from vertex $u$ to vertex $v$ that has no repeated vertices.
+	% except possibly $u$ and $v$ (i.e., $u=v$ is allowed). 
+\end{definition}
+\begin{definition}
+	The \textit{length} of a $u,v-$path containing $n$ vertices is $n-1$ (i.e., the length of a path is the number of edges in the path). A \textit{longest} $u,v-$path in a graph $G$ is one containing a maximum number of vertices where $u$ and $v$ can be any vertices in $G$ satisfying $u\ne v$. A $u,v-$path with length $k$ is called $P_k$.
+\end{definition}
+\begin{example}
+Consider the graph in Figure 1.5. Define paths $P_4=(a,b,d,e,f)$ and $P_3=(u,w,t,v)$, where $P_4$ is shown in red and $P_3$ is a subset of the walk from Example 1.4 shown in blue.
+\end{example}
+
+\begin{definition}
+	A $n$-\textit{cycle} (denoted $C_n$) is a walk on $n$ vertices of the form \[(v_1,v_2,v_3,\dots v_{n-1},v_1)\] such that for all $i,k\in\{1,2,3,\dots,n-1\}$ where $i\ne k$, $v_i\ne v_k$.
+\end{definition}
+\begin{example}
+	Consider the walk $(u,w,t,v,w)$ shown in blue in Figure 1.5. Notice that the walk $(w,t,v,w)$ contained in this blue walk is a $3-$cycle ($C_3$). 
+\end{example}
+\begin{definition}
+	A \textit{subgraph} of a graph $G=(V,E)$ is a graph $H=(V',E')$ where $V'\subset V$ and $E'\subset E$. If $H$ is a subgraph of $G$, we write $H\subset G$. 
+\end{definition}
+\begin{definition}
+	A graph $G=(V,E)$ is \textit{connected} if there exists a $u,v-$path for all distinct $u,v\in V$. Otherwise, we say $G$ is \textit{disconnected}.
+\end{definition}
+\begin{example}
+	The graph in Figure 1.5 is not connected because there does not exist a $f,u-$path. 
+\end{example}
+
+\begin{example}
+	Construct a subgraph $H = (V,E)$ of the graph shown in Figure 1.5 using the path $P_4$ shown in red by defining $V=\{a,b,d,e,f\}$ and $E=\{\{a,b\},\{b,d\},\{d,e\},\{e,f\}\}$.
+\end{example}
+\begin{definition}
+	A \textit{component} of a graph $G$ is a connected subgraph $C\subset G$ that is not a subgraph of any other connected subgraph of $G$.
+\end{definition}
+\begin{example}
+	Since the graph in Figure 1.5 is disconnected, there exists at least two components in that graph. Evidently, there are two: one component is the subgraph on the left, $K=(\{a,b,c,d,e,f\},\{\{a,b\},\{b,d\},\{b,c\},\{b,e\},\{d,e\},\{e,f\}\})$ and the other is the subgraph on the right, $W=(\{u,v,t,w\},\{\{u,w\},\{u,v\},\{v,w\},\{v,t\},\{t,w\}\})$. 
+\end{example}
+
+\begin{definition}
+	A simple graph $G=(V,E)$ where $|V|=n$ is \textit{complete}, denoted $G=K_n$, if $|E|=n(n-1)/2$.
+\end{definition}
+\begin{example}
+	See Figure 1.6 for an example of $K_4$.
+	\begin{figure}
+		% https://q.uiver.app/#q=WzAsNCxbMCwwLCJcXGJ1bGxldCJdLFsxLDEsIlxcYnVsbGV0Il0sWzIsMCwiXFxidWxsZXQiXSxbMSwyLCJcXGJ1bGxldCJdLFswLDEsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSwyLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzIsMywiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFszLDEsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMCwzLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzAsMiwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dXQ==
+\[\begin{tikzcd}
+	\bullet && \bullet \\
+	& \bullet \\
+	& \bullet
+	\arrow[no head, from=1-1, to=2-2]
+	\arrow[no head, from=2-2, to=1-3]
+	\arrow[no head, from=1-3, to=3-2]
+	\arrow[no head, from=3-2, to=2-2]
+	\arrow[no head, from=1-1, to=3-2]
+	\arrow[no head, from=1-1, to=1-3]
+\end{tikzcd}\]
+\caption{$K_4$}
+	\end{figure}
+\end{example}
+
+\subsection{The Graph Isomorphism Problem}
+\begin{definition}Given two graphs $G=(V,E)$ and $G'=(V',E')$, the \textit{graph isomorphism problem} is to determine if there exists a graph isomorphism from $G$ to $G'$.
+\end{definition}
+\begin{example}
+    Given the two graphs $G=(V,E)$ and $G'=(V',E')$ shown below, we construct a bijection $f:V\rightarrow V'$ such that $f$ is a graph isomorphism. 
+    % https://q.uiver.app/#q=WzAsMTIsWzIsMSwiXFxidWxsZXRcXDtiIl0sWzEsMCwiYVxcO1xcYnVsbGV0ICJdLFswLDEsIkNcXDtcXGJ1bGxldCAiXSxbMiwyLCJcXGJ1bGxldCBcXDtjIl0sWzEsMywiQVxcO1xcYnVsbGV0Il0sWzAsMiwiQlxcO1xcYnVsbGV0Il0sWzYsMCwiMVxcO1xcYnVsbGV0Il0sWzUsMSwiNlxcO1xcYnVsbGV0Il0sWzUsMiwiNVxcO1xcYnVsbGV0Il0sWzcsMSwiXFxidWxsZXRcXDsyIl0sWzcsMiwiXFxidWxsZXRcXDszIl0sWzYsMywiNFxcO1xcYnVsbGV0Il0sWzAsMSwiIiwyLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDIsIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMiwzLCIiLDIseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzMsNCwiIiwyLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs0LDUsIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNSwwLCIiLDIseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzYsNywiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs3LDgsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw5LCIiLDIseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzksMTAsIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTAsMTEsIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbOCwxMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dXQ==
+\[\begin{tikzcd}
+	& {a\;\bullet } &&&&& {1\;\bullet} \\
+	{C\;\bullet } && {\bullet\;b} &&& {6\;\bullet} && {\bullet\;2} \\
+	{B\;\bullet} && {\bullet \;c} &&& {5\;\bullet} && {\bullet\;3} \\
+	& {A\;\bullet} &&&&& {4\;\bullet}
+	\arrow[no head, from=2-3, to=1-2]
+	\arrow[no head, from=1-2, to=2-1]
+	\arrow[no head, from=2-1, to=3-3]
+	\arrow[no head, from=3-3, to=4-2]
+	\arrow[no head, from=4-2, to=3-1]
+	\arrow[no head, from=3-1, to=2-3]
+	\arrow[no head, from=1-7, to=2-6]
+	\arrow[no head, from=2-6, to=3-6]
+	\arrow[no head, from=1-7, to=2-8]
+	\arrow[no head, from=2-8, to=3-8]
+	\arrow[no head, from=3-8, to=4-7]
+	\arrow[no head, from=3-6, to=4-7]
+\end{tikzcd}\]
+We define $f$ below.
+% https://q.uiver.app/#q=WzAsNixbMCwxLCJiXFw7XFxtYXBzdG9cXDs2Il0sWzAsMCwiYVxcO1xcbWFwc3RvXFw7MSAiXSxbMSwyLCJDXFw7XFxtYXBzdG9cXDsyIl0sWzAsMiwiY1xcO1xcbWFwc3RvXFw7MyJdLFsxLDAsIkFcXDtcXG1hcHN0b1xcOzQiXSxbMSwxLCJCXFw7XFxtYXBzdG9cXDs1Il1d
+\[\begin{tikzcd}
+	{a\;\mapsto\;1, } & {A\;\mapsto\;4,} \\
+	{b\;\mapsto\;6,} & {B\;\mapsto\;5,} \\
+	{c\;\mapsto\;3,} & {C\;\mapsto\;2.}
+\end{tikzcd}\]
+   Evidently $f$ is a bijection where $f^{-1}$ is defined as follows.
+   % https://q.uiver.app/#q=WzAsNixbMCwxLCJiXFw7XFxtYXBzdG9cXDs2Il0sWzAsMCwiYVxcO1xcbWFwc3RvXFw7MSAiXSxbMSwyLCJDXFw7XFxtYXBzdG9cXDsyIl0sWzAsMiwiY1xcO1xcbWFwc3RvXFw7MyJdLFsxLDAsIkFcXDtcXG1hcHN0b1xcOzQiXSxbMSwxLCJCXFw7XFxtYXBzdG9cXDs1Il1d
+\[\begin{tikzcd}
+	{1\;\mapsto\;a, } & {4\;\mapsto\;A,} \\
+	{2\;\mapsto\;C,} & {5\;\mapsto\;B,} \\
+	{3\;\mapsto\;c,} & {6\;\mapsto\;b.}
+\end{tikzcd}\]
+To check that $f$ is a graph isomorphism, we need to check that for all $v_1,v_2\in V$, $\{v_1,v_2\}\in E$ if and if $\{f(v_1),f(v_2)\}\in E'$. Below is a table of all possible ordered pairs created by choosing elements from $V$. 
+\[\begin{tabular}{|c|c|c|c|c|c|c|}
+	\hline
+	& a&b&c&A&B&C\\
+	\hline
+	a&(a,a)&(a,b)&(a,c)&(a,A)&(a,B)&(a,C)\\
+	b&(b,a)&(b,b)&(b,c)&(b,A)&(b,B)&(b,C)\\
+	c&(c,a)&(c,b)&(c,c)&(c,A)&(c,B)&(c,C)\\
+	A&(A,a)&(A,b)&(A,c)&(A,A)&(A,B)&(A,C)\\
+	B&(B,a)&(B,b)&(B,c)&(B,A)&(B,B)&(B,C)\\
+	C&(C,a)&(C,b)&(C,c)&(C,A)&(C,B)&(C,C)\\
+	\hline
+\end{tabular}\]
+ We may think that there are $|V|\times|V|=36$ pairs to check. However, since $G$ and $G'$ are simple graphs, we do not have to check each pair. Specifically, we know that neither $G$ nor $G'$ have loops, meaning no entry from the diagonal, such as $\{a,a\}$, is in $E$ nor is $\{f(u),f(u)\}$ in $E'$ for any $u\in E$. Moreover, since the edges of $G$ and $G'$ are undirected, that is the edges are unordered rather than ordered pairs, 
+%  $\{u,v\}=\{v,u\}$ for all $u,v\in E$ and $(u',v')=(v',u')$ for all $u',v'\in E'$, 
+ we need only check either the upper or lower triangle of the table. Therefore, there are only ${6\choose 2}=15$ entries to check. This last step of verification that $f$ is a graph isomorphism is left to the reader.
+\end{example}
+The graph isomorphism problem (GI) has a straightforward statement. Given any two graphs, $G=\{V,E\}$ and $G'=\{V',E'\}$, solving the GI problem requires either proving the existence of a graph isomorphism from $V$ onto $V'$ satisfying the conditions in Definition 1.5 or showing no such function exists. There are some instances where solving the GI problem is as simple as the statement of the problem. If $V=V$ and $E=E'$, then the identity map is a graph isomorphism. If two graphs are both complete and have the same number of vertices, then they are isomorphic. On the other hand, there are many scenarios where it is easy to tell that a graph isomorphism between two graphs cannot exist. For example, since it is impossible to produce a bijection between two sets of different finite sizes, if $|V|\ne|V'|$ then $G$ is not isomorphic to $G'$.
+\paragraph{}Another way to think of a graph isomorphism is as a bijection between two graphs that preserves degree. Thus, if $G$ is a graph with two vertices of degree 3 while $G'$ only has a single vertex of degree 3, $G$ cannot be isomorphic to $G'$. In fact, every graph property must be shared between two graphs for there to exist a graph isomorphism between them. The following list contains some examples of this.
+\begin{enumerate}
+ \item If $G$ is connected and $G'$ is not connected, then $G$ and $G'$ are not isomorphic
+ \item If the length of the longest path in $G$ is not the same as length of the longest path in $G'$, then $G$ and $G'$ are not isomorphic. \item If $G$ has a 3-cycle while $G'$ does not, then $G$ and $G'$ are not isomorphic.
+ \item If two graphs have different degree sequences, then they are not isomorphic.
+\end{enumerate}
+
+When the given graphs, $G$ and $G'$, share several common properties (e.g., connected) and standard measures (e.g., longest path), solving the GI problem is more difficult. The problem becomes even more difficult when the graphs involved are regular and/or highly symmetric without being complete graphs. However, the issue at hand is not the difficulty of solving the GI problem for two specific graphs. The goal of researching the GI problem is to produce an algorithm or prove an algorithm exists that can efficiently solve the GI problem for \textit{any} two simple graphs.
+
+% In order to efficiently solve the GI problem for such graphs, complicated  algorithms have been developed. The difficulty of solving a computational problem is measured by the maximum runtime of the fastest algorithim applied to the problem set. 
+% \begin{definition}
+% 	An \textit{algorithm} $\mathcal{A}=(\mathcal{D},\mathcal{C},\mathcal{I})$ is an ordered triple where $\mathcal{D}$ is the set of possble inputs (i.e., domain), $\mathcal{C}$ is the set of possible outputs (i.e., codomain), and $\mathcal{I}$ is an ordered list of instructions that when applied to a subset $D\subset\mathcal{D}$, produces a function $f_{\mathcal{A},D}:D\rightarrow\mathcal{C}$ that defines the input-output relationship of $\mathcal{A}$ (i.e., if $d\in D$ is the input to $\mathcal{A}$, the output of $\mathcal{A}$ is $f_{\mathcal{A},D}(d)$). 
+% 	% of $\mathcal{A}$ $f_{\mathcal{A},D}(d)=c$ defines $\mathcal{A}$ given input $D$ is $C$. 
+% \end{definition}
+\subsection{Algorithms}
+    \begin{definition}
+        Given a set of graphs $\Gamma$, an \textit{algorithm for graph identification} is an algorithm with a domain of $\Gamma\times\Gamma$ that, given an input $(G_1,G_2)$, produces a result of $+1$ if $G_1\cong G_2$ and $-1$ if not \cite{weisfeiler1976construction}. 
+    \end{definition}
+    Let $\mathbb{A}$ be the set of all graph identification algorithms. The cardinality of $\mathbb{A}$ is large, perhaps infinite. We need a way to focus on the algorithms we care about, which is often the fast ones. We compare algorithms using the following definitions.
+	\begin{definition}
+		A \textit{step} in an algorithm is any computation unit that is independent of the problem size \cite{mehta2004handbook}.
+	\end{definition}
+    \begin{definition}
+        The \textit{running time} for algorithm $\mathcal{A}$ for graph identification is a function $f:\mathbb{A}\times\Nats\rightarrow\Nats$ where $f(\mathcal{A},n)$ is the maximum number of steps required by $\mathcal{A}$ to find the result for any pair of graphs in the domain of $\mathcal{A}$ where $n$ denotes the number of vertices in each graph \cite{weisfeiler1976construction}.
+    \end{definition}
+When discussing the running time of an algorithm for graph identification, we are interested in how the running time increases as the input size grows arbitrarily large. The following definition is a standard way of understanding the magnitude of a monotonic function, which is useful for comparing the running times of algorithms. 
+	\begin{definition}
+		For any monotonic functions $f,g:\Nats\rightarrow\Nats$, we write $f(n)=\mathcal{O}(g(n))$ if there exists $c,n_0>0$ such that for all $n\ge n_0$
+		\[f(n)\le cg(n).\] In such a case, we say ``$f(n)$\textit{ is on the order of }$g(n)$.'' 
+	\end{definition}
+	%https://viterbi-web.usc.edu/~adamchik/15-121/lectures/Algorithmic%20Complexity/complexity.html
+	% \begin{remark}
+	% 	Although it is standard notation to use '$=$', $\mathcal{O}(g(n))=f(n)$ is not the same statement as $f(n)=\mathcal{O}(g(n))$.
+	% \end{remark}
+	% \begin{remark}
+	% 	Depending on the algorithm, the definition of 'step' in the previous definition will change.
+	% \end{remark} 
+	Any algorithm for graph identification solves the GI problem. Since the preceeding defintion gives us a standard way to measure the speed of algorithms, it is reasonable to ask, "What is the fastest such algorithm?" This is exactly the question that researchers of the GI problem are trying to answer. The following definitions formalize this.
+    \begin{definition}
+        For all sufficiently large $n$, the \textit{problem of graph identification} is to find a graph identification algorithm $\mathcal{A}$ with a domain of consisting of all pairs of graphs on $n$ vertices such that, for any other such algorithm $\mathcal{B}$,
+        \[f(\mathcal{A},n)\le f(\mathcal{B},n)\]
+        \cite{weisfeiler1976construction}.
+    \end{definition}
+	\begin{definition}
+		A graph identification algorithm $\mathcal{A}$ \textit{solves the problem of graph identification} if it satisfies the conditions of the preceding definition.
+	\end{definition}
+	
+	\begin{definition}
+		Given an algorithm for graph identification $\mathcal{A}$ that solves the problem of graph identification, $f(\mathcal{A},n)$ is the \textit{time complexity} of the GI problem.
+	\end{definition}
+	\begin{remark}
+		The distinction between the GI problem and the problem of graph identification is for the benefit of the reader. Other authors may say ``a solution to the GI problem" to mean ``a solution to the problem of graph identification'' or ``a solution to the time complexity of the GI problem" in our context. 
+	\end{remark}
+	% \begin{definition}
+	% 	The \textit{upper bound} on the complex
+	% \end{definition}
+	Using the preceding defintions, so long as we do not care about running time, it is a straightforward task to develop a graph identificaiton algorithm. We return to this is in Section 2. One of the goals of research into the Graph Isomorphism problem is to prove that there exists an algorithm for graph identification that runs in polynomial time or to prove that no such algoithm exists.
+\begin{definition}
+	A graph identification algorithm for graphs on $n$ vertices has \textit{polynomial runtime} if for some $k>0$, its running time is $\mathcal{O}(n^k)$.
+\end{definition}
+\begin{definition}
+	A \textit{quasipolynomial} function is a function of the form $\exp(p(\log n))$ for some polynomial $p$ \cite{babai2018}.
+\end{definition}
+\begin{remark}
+	To help understand the maginutude of such fuctions, note \[\mathcal{O}(\exp(p(\log n)))=\exp((\log n)^{\mathcal{O}(1)})=n^{(\log n)^{\mathcal{O}(1)}}.\]
+\end{remark}
+\begin{definition}
+	A problem $P$ is \textit{polynomial time reducible} to another problem $P'$ if there exist an alogrithm with polynomial running time transforming $P$ into $P'$. 
+\end{definition}
+No polynomial time graph identification algorithm has been found, nor has the graph identification problem been solved. That is, we have no proof that we have found an optimal graph identification algorithm, which would solve the problem of Definition 1.21. Regardless, the GI problem is thought to be of polynomial time complexity. Driving this intuition is not only Babai's breakthrough result, but also the fact that polynomial running time algorithms exist for broad classes of graphs. For example, the upper bound for the time complexity of the GI problem restricted to planar graphs with $n$ vertices is $\mathcal{O}(n)$ \cite{hopcroft1974linear}. Progress has been made on GI in general by reducing GI to other problems in polynomial time, such as to the String Isomorphism problem (SI) (see Section 3). The most recent advance with respect to the the time complexity of the general GI problem is a result in \cite{babai2016,babai2018}, which, via a polynomial time reduction to SI, proves constructively that it is possible to solve GI for any pair of simple graphs in \textit{quasi-polynomial time} (with respect to the length of an input string or the number of vertices). 
+
+% Two landmark papers introduce algorithms for graph identificaiton that significantly reduced the upper bound. The first is \cite{luks1982}, which proved that when we restrict the domain to graphs with maximum degree less than some integer $d$, the GI problem can be tested in polynomial time. Moreover, 
+
+% thaThe time complexity of the GI is currently unsettled.
+
+\begin{definition}
+	An algorithm for graph identification $\mathcal{A}$ has \textit{quasi-polynomial} run time if \[f(\mathcal{A},n)=\exp(p(\log n))\]\cite{babai2016,babai2018}.
+\end{definition}
+% \begin{remark}
+% 	Although Babai's proof is constructive, meaning the proof contains information for constructing an algorithm, it is not an
+% \end{remark}
+Babai's algorithm is the culmination of decades of research into algebraic graph theory and combinatorics with a focus on determining the time complexity of the GI problem. This project presents an introduction to three core areas required for understanding his algorithm. 
+\paragraph{}The first area is canonical refinement, first presented for the purpose of graph identification in \cite{weisfeiler1968,weisfeiler1976construction} where the Weisfeler-Leman canonical refinement process (WL) is presented, including examples as well as a few algorithms related to graph identification. WL is at the core of most theoretical and practical graph identification algorithms, including \cite{babai2016,babai2018}. We present WL in the next section.
+\paragraph{}The second is the String Isomorphism problem (SI). In \cite{luks1982}, the Graph Isomorphism problem is reduced to the String Isomorphism problem in polyomial time. In \cite{babai2016,babai2018}, the main theorem (Theorem 2.1) is that string isomorphism can be tested in quasipolynomial time. When combined with \cite{luks1982}, the result is a proof that GI can be solved in quasipolynomial time as well. We present the SI with examples in Section 3.
+\paragraph{} The third is an algorithm for graph identification from \cite{luks1982}, which pioneered a divide-and-conquer method. The domain of this algorithm is graphs where every vertex has degree less than or equal to some bound $d\ge0$ \cite{luks1982}. In \cite{babai1983canonical,babai1983computational}, that result is combined with a combinatorial result from \cite{zemlyachenko1982isomorphism} to produce an upper bound of $\exp(\mathcal{O}(\sqrt{n\log n}))$ for the time complexity of the GI problem \cite{babai2018}. This algorthim is the backbone of \cite{babai2016,babai2018}. Specifically, Babai's algorithm is identical Luks' algorithm until a bottleneck is reached. Babai's major contribution lies in dealing with the bottleneck, but in order to understand Babai's algorithm as a whole, we must understand Luks' first. We present an intrdouction to the main result of \cite{luks1982} in Section 4.
+% \paragraph{} Section V is contains a comparision of the running time of the algorithms presented as well as a suggestion for further research into the current state of the complexity of the GI problem.
+% \paragraph{}Note that Babai's algorithm is actually a method for solving a more general problem, the \textit{string isomorphism problem}\cite{babai2016,babai2018}. \cite{luks1982} proves that  until it hits a bottleneck \cite{babai2016,babai2018}.\cite{luks1982} established a divide and conquer method and reduced the GI problem to a more general problem, the \textit{string isomoprhism problem} which will be discussed later.
+% Among the combinatorial and algebraic results that Babai's landmark result relies upon, there are at least two standout pieces of machinery.
+\begin{remark}
+	There are practical tools for efficiently solving the GI problem for two graphs, even if they have thousands or in some cases, millions, of vertices, see ``Nauty" introduced in \cite{mckay1981}.
+\end{remark} 
+
+% Although this is believed by many to be a step on the way to 
+% For any two graphs each on $n$ vertices, \cite{babai2016,babai2018} presents an algorithm to solve the graph isomorphism problem in $\exp\left((\log n)^{\mathcal{O}(1)}\right)$. Although the GI problem is thought to be of polynomial time complexity, Babai's bound is the best established.
+
+%\begin{definition} 
+%Given a colored set $A$ and generators for a group $ G$ of permutations of $A$ find the generators for the subgroup consisting of the color preserving maps. (Luks,1982)
+%\end{definition}
+
+%\begin{remark}
+%Functions are written in a matrix, with the pre-image in the top row and the image in the bottom row. For example, the identity is written \[\begin{pmatrix}x\\x\end{pmatrix}.\] Composition of functions adds a row for each function. For example, the identity composed with its inverse function is
+%\[\begin{pmatrix}x\\1/x\\1\end{pmatrix}.\]
+%\end{remark}
+
+
+
+

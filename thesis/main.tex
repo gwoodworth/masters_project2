@@ -1,0 +1,152 @@
+% This is a template for a thesis formatted to UAF graduate school standards in 2018. To compile this make sure you have a full latex install with all packages.  Table of contents and list of figures should be automatically generated.
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{epsfig}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{tocloft}
+\usepackage[margin=1in]{geometry}
+\usepackage{indentfirst}
+\usepackage{verbatim}
+\usepackage{subcaption}
+\usepackage{siunitx}
+\usepackage{chngcntr}
+\usepackage{mathtools,cancel}
+\usepackage{afterpage}
+\usepackage{url}
+\usepackage{amssymb,amsmath,amsthm}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{multicol}
+\usepackage{cite}
+
+
+%% Import a package useful for displaying graphics.
+\usepackage{graphicx}
+
+% Comment the following line to use TeX's default font of Computer Modern.
+%\usepackage{times,txfonts}
+
+
+\newtheoremstyle{ex215}% name of the style to be used
+  {18pt}% measure of space to leave above the theorem. E.g.: 3pt
+  {12pt}% measure of space to leave below the theorem. E.g.: 3pt
+  {}% name of font to use in the body of the theorem
+  {}% measure of space to indent
+  {\bfseries}% name of head font
+  {:}% punctuation between head and body
+  {2ex}% space after theorem head; " " = normal interword space
+  {}% Manually specify head
+\theoremstyle{ex215} 
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}{Definition}[section]
+\newtheorem*{remark}{Remark}
+\newtheorem{example}{Example}[section]
+\newtheorem{proposition}{Proposition}[section]
+
+% Set figure, subsection, equation and table counters
+\counterwithin{figure}{section}
+\counterwithin{subsection}{section}
+\counterwithin{equation}{section}
+\counterwithin{table}{section}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{quiver}
+\usepackage{float}
+\usepackage{subcaption}
+\setcitestyle{square}
+\doublespacing
+
+\renewcommand\cftsecfont{\normalfont}
+\renewcommand\cftsecpagefont{\normalfont}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftsecdotsep}}
+\renewcommand\cftsecdotsep{\cftdot}
+\renewcommand\cftsubsecdotsep{\cftdot}
+\renewcommand\cftsubsubsecdotsep{\cftdot}
+\cftsetindents{subsection}{1in}{0.5in}
+\cftsetindents{subsubsection}{2in}{0.5in}
+\renewcommand{\cftfigfont}{Figure }
+\renewcommand\cftfigdotsep{\cftdot}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{\arabic{section}.\arabic{figure}} % Format figure counter
+\renewcommand{\contentsname}{}                              % Removes the table of contents header
+
+\newcommand{\Reals}{\ensuremath{\mathbb R}}
+\newcommand{\Nats}{\ensuremath{\mathbb N}}
+\newcommand{\Ints}{\ensuremath{\mathbb Z}}
+\newcommand{\Rats}{\ensuremath{\mathbb Q}}
+\newcommand{\Cplx}{\ensuremath{\mathbb C}}
+\newcommand{\Sym}{\text{Sym}}
+\newcommand{\im}{\text{Im}}
+%% Some equivalents that some people may prefer.
+\let\RR\Reals
+\let\NN\Nats
+\let\II\Ints
+\let\CC\Cplx
+\def\Riem{\mathcal{R}}
+
+\newcommand\thesistitle{The Graph Isomorphism Problem:\\An Introduction}     % Put title here in all caps
+\newcommand{\mysection}[1]{%                 %using this instead of /section should handle formatting of section title and table of contents entry
+  \section*{#1}%
+  \addtocounter{section}{1}%
+  \addcontentsline{toc}{section}{#1}
+  \setcounter{equation}{0}
+  \setcounter{figure}{0}
+  \setcounter{subsection}{0}
+  \setcounter{table}{0}}
+  
+
+\titleformat{\section}
+  {\normalfont\fontfamily{phv}\fontsize{16}{19}\filcenter}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\fontfamily{phv}\fontsize{14}{17}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\fontfamily{phv}\fontsize{14}{17}}{\thesubsubsection}{1em}{}
+  
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.eps}  
+
+
+\begin{document}
+% Use include statements to add each chapter
+\pagenumbering{roman}  % Roman page numbering
+% Add the preliminary pages
+\include{prelim}
+\pagenumbering{arabic} % Switch to arabic numbering for the main document
+\setcounter{page}{1}
+% Add chapter 1
+\include{chapter_1}
+\newpage
+% \include{ch1_5}
+% \newpage
+\include{chapter_2}
+\newpage
+% \include{ch3new}
+\newpage
+\include{chapter_3}
+\newpage
+\include{chapter_4}
+\newpage
+\include{appendix}
+\newpage
+%\include{ch2}
+%\newpage 
+%\include{ch3}
+%\newpage
+% For each chapter, use a new include statement:
+% include{ch2}
+% \newpage
+
+
+%\addcontentsline{toc}{section}{References}  % Tile of your bibliography
+\bibliographystyle{agufull08}   % include your bibliography style file. This is the style file for the American Geophysical Union.
+\bibliography{main}                       % add the bibliography
+
+\end{document} 

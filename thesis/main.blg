@@ -1,0 +1,56 @@
+This is BibTeX, Version 0.99d (TeX Live 2023)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+A level-1 auxiliary file: prelim.aux
+A level-1 auxiliary file: chapter_1.aux
+A level-1 auxiliary file: chapter_2.aux
+A level-1 auxiliary file: chapter_3.aux
+A level-1 auxiliary file: chapter_4.aux
+A level-1 auxiliary file: appendix.aux
+The style file: agufull08.bst
+Database file #1: main.bib
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Warning--empty journal in mckay1981
+Warning--empty journal in weisfeiler1976construction
+You've used 15 entries,
+            3076 wiz_defined-function locations,
+            1165 strings with 11813 characters,
+and the built_in function-call counts, 12201 in all, are:
+= -- 1356
+> -- 298
+< -- 18
++ -- 148
+- -- 83
+* -- 683
+:= -- 1174
+add.period$ -- 15
+call.type$ -- 15
+change.case$ -- 64
+chr.to.int$ -- 16
+cite$ -- 17
+duplicate$ -- 1340
+empty$ -- 799
+format.name$ -- 126
+if$ -- 2519
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 126
+newline$ -- 52
+num.names$ -- 60
+pop$ -- 473
+preamble$ -- 1
+purify$ -- 51
+quote$ -- 0
+skip$ -- 789
+stack$ -- 0
+substring$ -- 516
+swap$ -- 1075
+text.length$ -- 6
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 129
+warning$ -- 2
+while$ -- 77
+width$ -- 0
+write$ -- 171
+(There were 2 warnings)

@@ -1,0 +1,52 @@
+\begin{thebibliography}{15}
+\providecommand{\natexlab}[1]{#1}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[{\textit{Babai}(2016)}]{babai2016}
+Babai, L. (2016), Graph isomorphism in quasipolynomial time [extended abstract], in \textit{Proceedings of the Forty-Eighth Annual ACM Symposium on Theory of Computing}, STOC '16, p. 684–697, Association for Computing Machinery, New York, NY, USA, \doi{10.1145/2897518.2897542}.
+
+\bibitem[{\textit{Babai}(2018)}]{babai2018}
+Babai, L. (2018), Group, graphs, algorithms: the graph isomorphism problem, in \textit{Proceedings of the International Congress of Mathematicians: Rio de Janeiro 2018}, pp. 3319--3336, World Scientific.
+
+\bibitem[{\textit{Babai and Luks}(1983)}]{babai1983canonical}
+Babai, L., and E.~M. Luks (1983), Canonical labeling of graphs, in \textit{Proceedings of the fifteenth annual ACM symposium on Theory of computing}, pp. 171--183.
+
+\bibitem[{\textit{Babai et~al.}(1983)\textit{Babai, Kantor, and Luks}}]{babai1983computational}
+Babai, L., W.~M. Kantor, and E.~M. Luks (1983), Computational complexity and the classification of finite simple groups, in \textit{24th Annual Symposium on Foundations of Computer Science (Sfcs 1983)}, pp. 162--171, IEEE.
+
+\bibitem[{\textit{Dummit and Foote}(2004)}]{dummit2004abstract}
+Dummit, D.~S., and R.~M. Foote (2004), \textit{Abstract algebra}, vol.~3, Wiley Hoboken.
+
+\bibitem[{\textit{Heap}(1963)}]{heap1963permutations}
+Heap, B. (1963), Permutations by interchanges, \textit{The Computer Journal}, \textit{6}(3), 293--298.
+
+\bibitem[{\textit{Hopcroft and Wong}(1974)}]{hopcroft1974linear}
+Hopcroft, J.~E., and J.-K. Wong (1974), Linear time algorithm for isomorphism of planar graphs (preliminary report), in \textit{Proceedings of the sixth annual ACM symposium on Theory of computing}, pp. 172--184.
+
+\bibitem[{\textit{Johnson}(1963)}]{johnson1963generation}
+Johnson, S.~M. (1963), Generation of permutations by adjacent transposition, \textit{Mathematics of computation}, \textit{17}(83), 282--285.
+
+\bibitem[{\textit{Luks}(1982)}]{luks1982}
+Luks, E.~M. (1982), Isomorphism of graphs of bounded valence can be tested in polynomial time, \textit{Journal of computer and system sciences}, \textit{25}(1), 42--65.
+
+\bibitem[{\textit{McKay et~al.}(1981)}]{mckay1981}
+McKay, B.~D., et~al. (1981), Practical graph isomorphism.
+
+\bibitem[{\textit{Mehta and Sahni}(2004)}]{mehta2004handbook}
+Mehta, D.~P., and S.~Sahni (2004), \textit{Handbook of data structures and applications}, Chapman and Hall/CRC.
+
+\bibitem[{\textit{Shervashidze et~al.}(2011)\textit{Shervashidze, Schweitzer, Van~Leeuwen, Mehlhorn, and Borgwardt}}]{shervashidze2011weisfeiler}
+Shervashidze, N., P.~Schweitzer, E.~J. Van~Leeuwen, K.~Mehlhorn, and K.~M. Borgwardt (2011), Weisfeiler-lehman graph kernels., \textit{Journal of Machine Learning Research}, \textit{12}(9).
+
+\bibitem[{\textit{Weisfeiler}(1976)}]{weisfeiler1976construction}
+Weisfeiler, B. (1976), On construction and identification of graphs, springer lecture notes, 558.
+
+\bibitem[{\textit{Weisfeiler and Leman}(1968)}]{weisfeiler1968}
+Weisfeiler, B., and A.~Leman (1968), The reduction of a graph to canonical form and the algebra which appears therein, \textit{nti, Series}, \textit{2}(9), 12--16.
+
+\bibitem[{\textit{Zemlyachenko et~al.}(1982)\textit{Zemlyachenko, Korneenko, and Tyshkevich}}]{zemlyachenko1982isomorphism}
+Zemlyachenko, V., N.~Korneenko, and R.~Tyshkevich (1982), The isomorphism problem for graphs, \textit{Zap. Nauch. Seminarov LOMI AN SSSR}, \textit{118}, 83--158.
+
+\end{thebibliography}

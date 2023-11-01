@@ -1,0 +1,38 @@
+\contentsline {section}{Title Page}{i}{}%
+\contentsline {section}{Abstract}{iii}{}%
+\contentsline {paragraph}{}{iii}{}%
+\contentsline {section}{Table of Contents}{v}{}%
+\contentsline {section}{List of Figures}{vii}{}%
+\contentsline {section}{Acknowledgments}{ix}{}%
+\contentsline {section}{\numberline {1}Introduction}{1}{}%
+\contentsline {subsection}{\numberline {1.1}Preliminaries}{1}{}%
+\contentsline {subsection}{\numberline {1.2}The Graph Isomorphism Problem}{8}{}%
+\contentsline {paragraph}{}{10}{}%
+\contentsline {subsection}{\numberline {1.3}Algorithms}{11}{}%
+\contentsline {paragraph}{}{14}{}%
+\contentsline {paragraph}{}{14}{}%
+\contentsline {paragraph}{}{14}{}%
+\contentsline {section}{\numberline {2}Weisfeler-Lehman}{16}{}%
+\contentsline {subsection}{\numberline {2.1}Definitions}{16}{}%
+\contentsline {subsection}{\numberline {2.2}A Canonization Algorithim}{16}{}%
+\contentsline {paragraph}{}{17}{}%
+\contentsline {paragraph}{}{17}{}%
+\contentsline {paragraph}{}{19}{}%
+\contentsline {paragraph}{}{19}{}%
+\contentsline {subsection}{\numberline {2.3}A Non-Isomorphism Test}{23}{}%
+\contentsline {paragraph}{}{24}{}%
+\contentsline {subsection}{\numberline {2.4}Simple Algorithms for Graph Identification based on WL}{26}{}%
+\contentsline {subsection}{\numberline {2.5}Brute Force}{26}{}%
+\contentsline {subsection}{\numberline {2.6}Brute Force with WL}{27}{}%
+\contentsline {paragraph}{}{27}{}%
+\contentsline {paragraph}{}{28}{}%
+\contentsline {paragraph}{}{29}{}%
+\contentsline {paragraph}{}{29}{}%
+\contentsline {paragraph}{}{29}{}%
+\contentsline {section}{\numberline {3}The String Isomorphism Problem}{31}{}%
+\contentsline {subsection}{\numberline {3.1}A graph as a string}{31}{}%
+\contentsline {section}{\numberline {4}Introduction to Luks' Algorithm}{36}{}%
+\contentsline {subsection}{\numberline {4.1}Definitions}{36}{}%
+\contentsline {section}{\numberline {5}Appendix}{39}{}%
+\contentsline {subsection}{\numberline {5.1}Running time}{39}{}%
+\contentsline {subsection}{\numberline {5.2}Babai's Algorithm}{39}{}%
