@@ -1,8 +1,8 @@
-PWD /home/gwoodworth/Documents/masters_project/thesis
+PWD /home/gwoodworth/Documents/masters_project2/thesis
 INPUT /usr/local/texlive/2023/texmf.cnf
 INPUT /usr/local/texlive/2023/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT /home/gwoodworth/Documents/masters_project/thesis/main.tex
+INPUT /home/gwoodworth/Documents/masters_project2/thesis/main.tex
 OUTPUT main.log
 INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/base/article.cls

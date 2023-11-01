@@ -10,6 +10,9 @@ The following defintions come directly from \cite{luks1982}
 \begin{definition}
     If $G\subseteq\Sym(A)$ acts transitively on $A$, $B\subset A$, $B\ne\emptyset, A$, and for all $\sigma,\tau\in G$, $\sigma(B)=\tau(B)$ or $\sigma(B)\cap\tau(B)=\emptyset$, then we say $B$ is a $G$-\textit{block}.
 \end{definition}
+\begin{remark}
+    An alternate but equivalent definition for a $G$-block is that $B$ is a $G$-block if for all $\sigma\in G$, $\sigma(B)=B$ or $\sigma(B)\cap B=\emptyset$.
+\end{remark}
 \begin{definition}
     If $B$ is a $G$-block, we call $\{\sigma(B):\sigma\in G\}$ a $G$-\textit{block system in} $A$.
 \end{definition}
@@ -37,10 +40,12 @@ Let $\sigma,\tau\in G_B$. Observe,
 Thus, $G_B\le G$. Let $\gamma\in G_a$. Since $B$ is a $G$-block on $A$, $\gamma(B)=B$ or $\gamma(B)\cap B=\emptyset$. Since $\gamma(a)=a$ and $a\in B$, we know $\gamma(B)=B$. Hence, $G_a\le G_B$.
 \end{proof}
 \begin{proposition}
-    For any finite set $A$ where $G\le\Sym(A)$ acts transitively on $A$, $G$ is primitive on $A$ if and only if $G_a$ is a maximal subgroup of $G$.\cite[117]{dummit2004abstract}  
+    For any finite set $A$ where $G\le\Sym(A)$ acts transitively on $A$, $G$ is primitive on $A$ if and only if for all $a\in A$ $G_a$ is a maximal subgroup of $G$.\cite[117]{dummit2004abstract}  
 \end{proposition}
 \begin{proof}
-    From Proposition 4.1, we know that $G_a$
+    $\Rightarrow$\\Let $a\in A$. Suppose $G_a\le H\le G$. Consider $B=\{ha:h\in H\}$. We show that $B$ is a $G$-block on $A$. Let $\sigma\in G$. Note $\sigma(B)=\{\sigma(ha):h\in H\}$ and suppose there exist $b\in \sigma(B)\cap B$. Then there exist $h_1,h_2\in H$ such that $h_1a=b$ and $\sigma(h_2a)=b$. Hence, $a=h_1^{-1}(\sigma(h_2a))$, but then $h_1^{-1}\sigma h_2\in G_a\le H$. Observe, $\sigma=h_1h_1^{-1}\sigma h_2h_2^{-1}\in H$. Therefore, $\sigma(B)=B$, which means $B$ is a $G$-block. Since $G$ acts primitively on $A$, either $B=\{a\}$ or $B=A$. If $B=\{a\}$, then $H\le G_a$, so $H=G_a$. On the other hand, suppose $B=A$. Let $g\in G$. Since $B=A$, there exist $h\in H$ such that $ga=ha$. We have $h^{-1}ga=a$, which means $h^{-1}g\in G_a\le H$. Therefore, $g=hh^{-1}g\in H$, as desired. Hence,  $G=H$.\\
+    $\Leftarrow$\\
+    Let $a\in A$. Suppose $B$ is a $G$-block in $A$ containing $a$. By Proposition 4.1, $G_B=\{\sigma\in G:\sigma(B)=B\}$ is a subgroup containing $G_a$. Since $G_a$ is a maximal subgroup, either $G_B=G_a$ or $G_B=G$. Suppose $G_B=G_a$. Then for all $\sigma\in G_B$, $\sigma$...
 \end{proof}
 \begin{lemma}Let $P$ be a transitive $p$-subgroup of Sym$(A)$ with $|A|>1$. Then any minimal $P$-block system consists of exactly $p$ block. Furthermore, the subgroup $P'$ which stabilizes all of the blocks has index $p$ in $P$ (Luks 1982). 
 \end{lemma}
