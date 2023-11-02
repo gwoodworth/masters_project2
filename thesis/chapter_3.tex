@@ -134,14 +134,14 @@ Hence, $\sigma\circ\eta\in S_n^{(2)}$. Lastly, consider $f_\sigma^{-1}\in S_n$. 
 Two graphs are isomorphic if and only if their string representations are $S_n^{(2)}$-isomorphic.
 \end{lemma}
 \begin{proof}
-Let $B_1$ and $B_2$ be binary string representations of undirected graphs $G_1$ and $G_2$, respectively. \\
-$\rightarrow$\\
-Suppose $G_1\cong G_2$. By Definition~\ref{def:def112}, there exists bijection $g:V(G_1)\rightarrow V(G_2)$ such that for all $u,v\in V(G_1)$, $\{u,v\}\in E(G_1)$ if and only if $\{g(u),g(v)\}\in E(G_2)$. Notice that $g\in S_n$. Let $\sigma:{[n]\choose 2}\rightarrow {[n]\choose 2}$ where $\sigma(\{u,v\})=\{g(u),g(v)\}$. Then $\sigma\in S_n^{(2)}$. Let $u,v\in [n]$. Consider $B_2\circ\sigma(\{u,v\})$. We have
-\[B_2\circ\sigma(\{u,v\})=B_2(\{g(u),g(v)\})=B_1(\{u,v\}).\] The last equality follows because $\{u,v\}\in E(G_1)$ if and only if $\{g(u),g(v)\}\in E(G_2)$. This means  $B_1(\{u,v\})=1$ if and only if $B_2(\{g(u),g(v)\})=1$. Hence, $B_2\cong B_1$.\\
-$\leftarrow$\\
-Suppose $B_1\cong B_2$. By Definition~\ref{def:def225}, there exists $\sigma\in S_n^{(2)}$ such that $B_1\circ \sigma=B_2$. Let $\omega=\{u,v\}\in{[n]\choose 2}$. There exists $f_\sigma\in S_n$ such that $\sigma(\omega)=\{f_\sigma(u),f_\sigma(v)\}.$ We have
-\[B_2(\{u,v\})=B_1\circ \sigma(\{u,v\})=B_1(\{f_\sigma(u),f_\sigma(v)\}).\]
-This means that $B_2(\{u,v\})=1$ if and only if $B_1(\{f_\sigma(u),f_\sigma(v)\})=1$. In other words, $\{u,v\}\in E(G_2)$ if and only if $\{f_\sigma(u),f_\sigma(v)\}\in E(G_1)$. Hence, $G_1\cong G_2$. 
+Let $\delta_{G_1}$ and $\delta_{G_2}$ be binary string representations of undirected graphs $G_1$ and $G_2$, respectively. \\
+$\Rightarrow$\\
+Suppose $G_1\cong G_2$. By Definition~\ref{def:def333}, there exists bijection $g:V(G_1)\rightarrow V(G_2)$ such that for all $u,v\in V(G_1)$, $\{u,v\}\in E(G_1)$ if and only if $\{g(u),g(v)\}\in E(G_2)$. Notice that $g\in S_n$. Let $\sigma:{[n]\choose 2}\rightarrow {[n]\choose 2}$ where $\sigma(\{u,v\})=\{g(u),g(v)\}$. Then $\sigma\in S_n^{(2)}$. Let $u,v\in [n]$. Consider $\delta_{G_2}\circ\sigma(\{u,v\})$. We have
+\[\delta_{G_2}\circ\sigma(\{u,v\})=\delta_{G_2}(\{g(u),g(v)\})=\delta_{G_1}(\{u,v\}).\] The last equality follows because $\{u,v\}\in E(G_1)$ if and only if $\{g(u),g(v)\}\in E(G_2)$. This means  $\delta_{G_1}(\{u,v\})=1$ if and only if $\delta_{G_2}(\{g(u),g(v)\})=1$. Hence, $\delta_{G_2}\cong \delta_{G_1}$.\\
+$\Leftarrow$\\
+Suppose $\delta_{G_1}\cong \delta_{G_2}$. Note that for any $\sigma\in S_n^{(2)}$, there exist $f_\sigma\in S_n$ such that $\sigma(\{u,v\})=\{f_\sigma(u),f_\sigma(v)\}$ for any $\{u,v\}\in{[n]\choose2}$. Since $\delta_{G_1}\cong\delta_{G_2}$, by Definition~\ref{def:def225}, there exists $\hat\sigma\in S_n^{(2)}$ such that $\delta_{G_1}\circ \hat\sigma=\delta_{G_2}$. We have
+\[\delta_{G_2}(\{u,v\})=\delta_{G_1}\circ \hat\sigma(\{u,v\})=\delta_{G_1}(\{f_{\hat\sigma}(u),f_{\hat\sigma}(v)\}).\]
+This means that $\delta_{G_2}(\{u,v\})=1$ if and only if $\delta_{G_1}(\{f_{\hat\sigma(u)},f_{\hat\sigma(v)}\})=1$. In other words, $\{u,v\}\in E(G_2)$ if and only if $\{f_{\hat\sigma(u)},f_{\hat\sigma(v)}\}\in E(G_1)$. Hence, $G_1\cong G_2$. 
 \end{proof}
 
 

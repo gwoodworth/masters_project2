@@ -25,18 +25,18 @@
 	Hence, $f(n)=\mathcal{O}((n+2)!)$ where $c=2$.
 \end{proof}
 \subsection{Babai's Algorithm}
-The following is an overview of \cite{babai2016,babai2018}. Babai's goal is to use a "Divide-and-Conquer" recursive method, pioneered in \cite{luks1982}. 
-\begin{definition}
-	Let $\mathcal{A}$ be an algorithm with an input of size $n$ and $q(n)$ be the number of smaller instances $n$ is reduced to. Ignoring the additive cost of assembling all information from smaller instances,
-	\[f(\mathcal{A},n)\le q(n)f(\mathcal{A},0.9n).\] 
-\end{definition}
-Here is a high level view taken from \cite{babai2018,babai2016} on how his algorithm divides the GI into smaller instances (see Appendix for most definitions):
+The following is an short overview of \cite{babai2016,babai2018}. Babai's goal is to use a "Divide-and-Conquer" recursive method, pioneered in \cite{luks1982}. 
+% \begin{definition}\label{def:def555}
+% 	Let $\mathcal{A}$ be an algorithm with an input of size $n$ and $q(n)$ be the number of smaller instances $n$ is reduced to. Ignoring the additive cost of assembling all information from smaller instances,
+% 	\[f(\mathcal{A},n)\le q(n)f(\mathcal{A},0.9n).\] 
+% \end{definition}
+% Using Definition~\ref{def:def555}, \cite{babai2018,babai2016} on how his algorithm approaches GI (see \cite{babai2016,babai2018} for details):
 \begin{enumerate}
 	\item Reduce GI to the more general String Isomorphism Problem (SI) (see Section III)
-	\item Solve SI in quasipolynomial time via:
-	\subitem{a.} Follow \cite{luks1982} algorithm until hitting a bottlenock
-	\subitem{b.} At a bottleneck, an "ideal domain" $\Gamma$ is revealed. 
-	\subsubitem{i.}Use a group theoretic algorithm called "Local Certificates" to construct a canonical structure on the domain.
-	\subsubitem{ii.} Use combinatroial partitioning algorithms to reducee the size of $\Gamma$.
-	\subsubitem{iii.} Use individualization (i.e., Weisfeiler-Lehman) to individualize each element of $\Gamma$, which reduces the size of the input string.
+	\item Solve SI in quasipolynomial time via a combination of new results as well as the algorithm from \cite{luks1982} and Weisfeiler-Lehman.
+	% \subitem{a.} Follow \cite{luks1982} algorithm until hitting a bottlenock
+	% \subitem{b.} At a bottleneck, an "ideal domain" $\Gamma$ is revealed. 
+	% \subsubitem{i.}Use a group theoretic algorithm called "Local Certificates" to construct a canonical structure on the domain.
+	% \subsubitem{ii.} Use combinatroial partitioning algorithms to reducee the size of $\Gamma$.
+	% \subsubitem{iii.} Use individualization (i.e., Weisfeiler-Lehman) to individualize each element of $\Gamma$, which reduces the size of the input string.
 \end{enumerate}
